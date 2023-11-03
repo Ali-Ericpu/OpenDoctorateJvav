@@ -1,4 +1,4 @@
-# openarknightsjvav
+# OpenDoctorateJvav
 
 This project uses [jvav](https://orangezscb.gitee.io/jvav/) to implement a poor imitation of the OpenDoctoratePy project
 
