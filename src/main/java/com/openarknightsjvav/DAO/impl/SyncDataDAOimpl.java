@@ -1,9 +1,5 @@
 package com.openarknightsjvav.DAO.impl;
 
-import com.alibaba.fastjson.JSONReader;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 import com.openarknightsjvav.DAO.SyncDataDAO;
 import com.openarknightsjvav.utils.JsonUtils;
 import org.apache.commons.io.FileUtils;
@@ -11,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
