@@ -4,6 +4,6 @@ This project uses [jvav](https://orangezscb.gitee.io/jvav/) to implement a poor 
 
 This project is currently in its initial stage
 
-## Licensing
+### *License*
 
-[MIT](LICENSE) © Richard Littauer
+Fastjson is released under the [Apache 2.0 license]
