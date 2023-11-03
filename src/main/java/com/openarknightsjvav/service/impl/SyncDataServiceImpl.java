@@ -2,16 +2,14 @@ package com.openarknightsjvav.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.openarknightsjvav.DAO.impl.SyncDataDAOimpl;
+import com.openarknightsjvav.pojo.syncData.Dungeon;
 import com.openarknightsjvav.service.SyncDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.openarknightsjvav.pojo.syncData.Dungeon;
 
 /**
  * ClassName, SyncDataServiceImpl
@@ -27,6 +25,7 @@ public class SyncDataServiceImpl implements SyncDataService {
 
     @Autowired
     private SyncDataDAOimpl syncDataDAOimpl;
+
     @Override
     public LinkedHashMap getSyncData() throws IOException {
 
@@ -43,7 +42,7 @@ public class SyncDataServiceImpl implements SyncDataService {
             innerStages.put("hasBattleReplay", 0);
             innerStages.put("noCostCnt", 0);
             innerStages.put("practiceTimes", 0);
-            innerStages.put("stageId",stages.get(i));
+            innerStages.put("stageId", stages.get(i));
             innerStages.put("startTimes", 1);
             innerStages.put("state", 3);
             putStages.put(stages.get(i), innerStages);
@@ -51,7 +50,7 @@ public class SyncDataServiceImpl implements SyncDataService {
         }
         //dungeon//cowLevel
         dungeon.setCowLevel(new LinkedHashMap());
-        syncData.put("dungeon",BeanUtil.beanToMap(dungeon));
+        syncData.put("dungeon", BeanUtil.beanToMap(dungeon));
 
 
         return syncData;

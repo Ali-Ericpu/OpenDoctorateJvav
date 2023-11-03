@@ -27,7 +27,7 @@ public class SyncDataController {
     private SyncDataService syncDataService;
 
     @PostMapping("/account/syncData")
-        public Result getSyncData() throws IOException {
+    public Result getSyncData() throws IOException {
         LinkedHashMap syncData = syncDataService.getSyncData();
         return Result.sendSyncData(syncData);
     }

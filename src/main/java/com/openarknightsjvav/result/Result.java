@@ -31,9 +31,9 @@ public class Result {
     public static Result sendSyncData(Object user) {
         Long time = System.currentTimeMillis() / 1000;
         LinkedHashMap linkedHashMap = new LinkedHashMap();
-        linkedHashMap.put("modified",new HashMap());
-        linkedHashMap.put("deleted",new HashMap());
-        return new Result(0 ,time ,user ,linkedHashMap);
+        linkedHashMap.put("modified", new HashMap());
+        linkedHashMap.put("deleted", new HashMap());
+        return new Result(0, time, user, linkedHashMap);
     }
 
     public Integer getResult() {

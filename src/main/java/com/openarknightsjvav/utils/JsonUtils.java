@@ -14,10 +14,11 @@ public class JsonUtils {
      * 1. Value是字符串，自动转为字符串,例如:{"a"："b"}
      * 2. Value是其他JSON对象，自动转为Map，例如：{"a":{"b":"2"}}}
      * 3. Value是数组，自动转为List<Map>，例如：{"a":[{"b":"2"},{"c":"3"}]}
+     *
      * @param json 输入的JSON对象
      * @return 动态的Map集合
      */
-    public static Map<String,Object> transferToMap(String json) {
+    public static Map<String, Object> transferToMap(String json) {
         Gson gson = new Gson();
         Map<String, Object> map = gson.fromJson(json,
                 new TypeToken<Map<String, Object>>() {
@@ -27,8 +28,9 @@ public class JsonUtils {
 
     /**
      * 简化方法
-     * @param json 原始的JSON数据
-     * @param path OGNL规则表达式
+     *
+     * @param json  原始的JSON数据
+     * @param path  OGNL规则表达式
      * @param clazz Value对应的目标类
      * @return clazz对应数据
      */
