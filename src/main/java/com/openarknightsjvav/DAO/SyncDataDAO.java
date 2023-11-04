@@ -19,4 +19,6 @@ public interface SyncDataDAO {
     LinkedHashMap getStatus() throws IOException;
 
     LinkedHashMap getDungeon() throws IOException;
+
+    LinkedHashMap getTroop() throws IOException;
 }

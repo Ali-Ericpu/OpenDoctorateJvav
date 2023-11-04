@@ -3,13 +3,17 @@ package com.openarknightsjvav.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.openarknightsjvav.DAO.impl.SyncDataDAOimpl;
 import com.openarknightsjvav.service.SyncDataService;
+import com.openarknightsjvav.utils.JsonUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ClassName, SyncDataServiceImpl
@@ -26,6 +30,7 @@ public class SyncDataServiceImpl implements SyncDataService {
     @Autowired
     private SyncDataDAOimpl syncDataDAOimpl;
 
+
     @Override
     public LinkedHashMap getSyncData() throws IOException {
 
@@ -39,6 +44,9 @@ public class SyncDataServiceImpl implements SyncDataService {
 
         //status
         syncData.put("status",syncDataDAOimpl.getStatus());
+
+        //troop
+        syncData.put("troop",syncDataDAOimpl.getTroop());
 
 
         return syncData;
