@@ -25,7 +25,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
 
     @Override
     public List getStages() throws IOException {
-        //读取json到内存转为string
+        //读取json转为string
         String stage = FileUtils.readFileToString(new File("src/main/resources/data/excel/stage_table.json"));
         //调用工具类将读取到的字符串转化为map
         Map<String, Object> map = JsonUtils.transferToMap(stage);
