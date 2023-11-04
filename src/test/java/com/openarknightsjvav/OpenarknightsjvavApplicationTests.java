@@ -1,24 +1,15 @@
 package com.openarknightsjvav;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONReader;
-import com.google.gson.stream.JsonReader;
 import com.openarknightsjvav.utils.JsonUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Set;
 
 @SpringBootTest
 class OpenarknightsjvavApplicationTests {
@@ -30,17 +21,35 @@ class OpenarknightsjvavApplicationTests {
 //        System.out.println(map);
         Map stages = (Map) map.get("stages");
 //        System.out.println(stages);
-
-
+        ArrayList list = new ArrayList();
+        ArrayList getCowLevel = new ArrayList();
         for (Object key : stages.keySet()) {
-            ArrayList list = new ArrayList();
-            list.add(key);
-            System.out.println(list);
-//            System.out.println("Key = " + key);
 
+            list.add(key);
+             String s = (String) key;
+            if (s.contains("spst")){
+                getCowLevel.add(s);
+            }
+//            System.out.println(list);
+//            System.out.println(s);
+//            System.out.println("Key = " + key);
         }
 
+        System.out.println(getCowLevel);
+
+
     }
+
+    @Test
+    void test() throws IOException {
+        String s = FileUtils.readFileToString(new File("src/main/resources/data/excel/story_table.json"));
+        Map<String, Object> flagsMap = JsonUtils.transferToMap(s);
+        for (int i = 0; i < flagsMap.size(); i++) {
+            Set<String> set = flagsMap.keySet();
+            System.out.println(set);
+        }
+    }
+
 
 
 }

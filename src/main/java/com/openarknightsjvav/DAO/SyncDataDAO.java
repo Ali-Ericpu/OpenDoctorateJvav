@@ -1,6 +1,7 @@
 package com.openarknightsjvav.DAO;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -13,5 +14,9 @@ import java.util.List;
  * @Version 1.0
  */
 public interface SyncDataDAO {
-    List getStages() throws IOException;
+    LinkedHashMap getActivity();
+
+    LinkedHashMap getStatus() throws IOException;
+
+    LinkedHashMap getDungeon() throws IOException;
 }
