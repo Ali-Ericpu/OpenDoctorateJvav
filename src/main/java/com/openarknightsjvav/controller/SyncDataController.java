@@ -4,6 +4,7 @@ import com.openarknightsjvav.result.Result;
 import com.openarknightsjvav.service.SyncDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,5 +31,10 @@ public class SyncDataController {
     public Result getSyncData() throws IOException {
         LinkedHashMap syncData = syncDataService.getSyncData();
         return Result.sendSyncData(syncData);
+    }
+
+    @GetMapping("/test")
+    public Result test(){
+        return Result.sendSyncData(new LinkedHashMap());
     }
 }
