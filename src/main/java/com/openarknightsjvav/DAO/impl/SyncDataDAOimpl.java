@@ -155,24 +155,28 @@ public class SyncDataDAOimpl implements SyncDataDAO {
     @Override
     public LinkedHashMap getTroop() throws IOException {
         LinkedHashMap troop = new LinkedHashMap();
+        String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
+        String loadSkins = FileUtils.readFileToString(new File("src/main/resources/data/excel/skin_table.json"), "utf-8");
+        String loadEquip = FileUtils.readFileToString(new File("src/main/resources/data/excel/uniequip_table.json"), "utf-8");
 
         //chars
         Integer maxInstId = 0;        //curCharInstId
         ArrayList<Integer> defaultSkillIndex = new ArrayList();     //skillIndex
         ArrayList<Integer> phases = new ArrayList<>();         //phases
         Map<String, Double> charConfig = Confing.getCharConfig();
-        String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
         ArrayList<String> listChars = new ArrayList<>();         //char
         ArrayList<Integer> listInstId = new ArrayList<>();      //instId
         ArrayList<String> skins = new ArrayList<>();            //skin
-        String loadSkins = FileUtils.readFileToString(new File("src/main/resources/data/excel/skin_table.json"), "utf-8");
-        LinkedHashMap<Integer,Object> chars = new LinkedHashMap<>();
+        ArrayList<String> currentEquip = new ArrayList<>();     //currentEquip
+        LinkedHashMap<String, LinkedHashMap> equip = new LinkedHashMap<>();     //equip
+        LinkedHashMap<Integer, Object> chars = new LinkedHashMap<>();
         ArrayList<Integer> skillCount;
         ArrayList<Object> evolvePhase;
         ArrayList<Double> level = new ArrayList<>();
         ArrayList<ArrayList> listLevel = new ArrayList<>();
         ArrayList<ArrayList> listSkills = new ArrayList<>();
         ArrayList<Object> skills = new ArrayList<>();
+
 
         Map<String, Object> mapChar = JsonUtils.transferToMap(loadChars);
         Set<String> setChar = mapChar.keySet();
@@ -227,13 +231,13 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         }
         //skills
         for (int i = 0; i < listChars.size(); i++) {
-            LinkedHashMap<String,Object> skillId = new LinkedHashMap();
+            LinkedHashMap<String, Object> skillId = new LinkedHashMap();
             //E2
             if ((listSkills.get(i)).size() >= 2) {
                 ArrayList<Object> list = new ArrayList<>();
-                for (int j = 0; j < (listSkills.get(i)).size() ; j++) {
+                for (int j = 0; j < (listSkills.get(i)).size(); j++) {
                     Map map = (Map) (listSkills.get(i).get(j));
-                    LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
+                    LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
                     linkedHashMap.put("skillId", map.get("skillId"));
                     linkedHashMap.put("unlock", 1);
                     linkedHashMap.put("state", 0);
@@ -245,55 +249,81 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 //E1
             } else if ((listSkills.get(i)).size() == 1) {
                 Map map = (Map) (listSkills.get(i).get(0));
-                LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
+                LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
                 linkedHashMap.put("skillId", map.get("skillId"));
                 linkedHashMap.put("unlock", 1);
                 linkedHashMap.put("state", 0);
                 linkedHashMap.put("specializeLevel", 0);
                 linkedHashMap.put("completeUpgradeTime", -1);
-                skills.add(new LinkedHashMap<>().put(i,linkedHashMap));
+                skills.add(new LinkedHashMap<>().put(i, linkedHashMap));
                 //E0
-            } else if ((listSkills.get(i)).size() == 0){
+            } else if ((listSkills.get(i)).size() == 0) {
                 skills.add(new ArrayList<>());
             }
         }
         //get all skin
         Map<String, Object> mapCharSkin = JsonUtils.transferToMap(loadSkins);
-        Map<String,Map> mapSkins =(Map) mapCharSkin.get("charSkins");
+        Map<String, Map> mapSkins = (Map) mapCharSkin.get("charSkins");
         HashMap<String, Map> tempSkin = new HashMap<>();
         ArrayList<String> listSkinId = new ArrayList<>();
         for (String s : mapSkins.keySet()) {
             listSkinId.add(s);
         }
-
         for (int i = 0; i < mapSkins.size(); i++) {
-            String s0 =(String) (mapSkins.get(listSkinId.get(i))).get("skinId");
-            if(s0.contains("@")){
-                String s1 =(String) (mapSkins.get(listSkinId.get(i))).get("charId");
-                tempSkin.put(s1,Map.of("skinId", s0,
+            String s0 = (String) (mapSkins.get(listSkinId.get(i))).get("skinId");
+            if (s0.contains("@")) {
+                String s1 = (String) (mapSkins.get(listSkinId.get(i))).get("charId");
+                tempSkin.put(s1, Map.of("skinId", s0,
                         "charId", s1));
             }
         }
         //skins
-        int count = 0;
         for (int i = 0; i < listChars.size(); i++) {
             //E0&E1  expect roguelike char
-            if ((listSkills.get(i)).size() <= 1 || StringUtils.containsAny(listChars.get(i), "char_508_aguard", "char_509_acast", "char_510_amedic", "char_511_asnipe")){
-                skins.add(listChars.get(i)+"#1");
+            if ((listSkills.get(i)).size() <= 1 || StringUtils.containsAny(listChars.get(i), "char_508_aguard", "char_509_acast", "char_510_amedic", "char_511_asnipe")) {
+                skins.add(listChars.get(i) + "#1");
                 //E2
             } else if ((listSkills.get(i)).size() > 1) {
-                skins.add(listChars.get(i)+"#2");
+                skins.add(listChars.get(i) + "#2");
             }
+            //seasonal
             if (tempSkin.get(listChars.get(i)) != null &&
                     (tempSkin.get(listChars.get(i))).get("charId").equals(listChars.get(i))) {
                 skins.set(i, (String) (tempSkin.get(listChars.get(i))).get("skinId"));
             }
         }
-
-
+        //currentEquip and equip
+        HashMap<String, Map> listEquip = new HashMap();
+        Map<String, Object> mapEquip = JsonUtils.transferToMap(loadEquip);
+        Map<String, ArrayList> CharEquip = (Map) mapEquip.get("charEquip");
+        Map<Object, Object> mapAllEquip = new HashMap<>();
+        for (String equipKey : CharEquip.keySet()) {
+            listEquip.put(equipKey, Map.of("charId", equipKey,
+                    "equipId", CharEquip.get(equipKey).get(CharEquip.get(equipKey).size() - 1),
+                    "listEquip", CharEquip.get(equipKey)));
+        }
+        for (int i = 0; i < listChars.size(); i++) {
+            currentEquip.add("null");
+            if (listEquip.get(listChars.get(i)) == null) {
+                currentEquip.set(i, null);
+                equip.put(listChars.get(i), new LinkedHashMap());
+            } else if (listEquip.get(listChars.get(i)).get("charId").equals(listChars.get(i))) {
+                currentEquip.set(i, (String) listEquip.get(listChars.get(i)).get("equipId"));
+                LinkedHashMap<Object, Object> hashMap = new LinkedHashMap<>();
+                for (int j = 0; j < ((ArrayList) listEquip.get(listChars.get(i)).get("listEquip")).size(); j++) {
+                    HashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
+                    linkedHashMap.put("hide", 0);
+                    linkedHashMap.put("locked", 0);
+                    linkedHashMap.put("level", j > 0 ? 3 : 1);    //又不是不能用0.0
+                    hashMap.put(((ArrayList<?>) listEquip.get(listChars.get(i)).get("listEquip")).get(j), linkedHashMap);
+                }
+                equip.put(listChars.get(i), hashMap);
+            }
+        }
 
         for (int i = 0; i < listChars.size(); i++) {
-            LinkedHashMap<String,Object> innerChars = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> innerChars = new LinkedHashMap<>();
+
             innerChars.put("instId", listInstId.get(i));
             innerChars.put("charId", listChars.get(i));
             innerChars.put("favorPoint", charConfig.get("favorPoint").intValue());
@@ -303,14 +333,68 @@ public class SyncDataDAOimpl implements SyncDataDAO {
             innerChars.put("level", level.get(i).intValue());
             innerChars.put("exp", 0);
             innerChars.put("evolvePhase", phases.get(i) - 1);
+
+            //amiya
+            if (listChars.get(i).equals("char_002_amiya")) {
+
+                LinkedHashMap<String, Object> amiya = new LinkedHashMap<>();
+                LinkedHashMap<String, Object> amiya2 = new LinkedHashMap<>();
+                LinkedHashMap<Object, Object> tmpl = new LinkedHashMap<>();
+                ArrayList<LinkedHashMap> amiyaSkills = new ArrayList<>();
+                String[] skillName= {"skchr_amiya2_1","skchr_amiya2_2"};
+
+                amiya.put("skinId", "char_002_amiya@winter#1");
+                amiya.put("defaultSkillIndex", 2);
+                amiya.put("skills", skills.get(i));
+                amiya.put("currentEquip", currentEquip.get(i));
+                amiya.put("equip", equip.get(listChars.get(i)));
+                amiya2.put("skinId", "char_1001_amiya2@casc#1");
+                amiya2.put("defaultSkillIndex", 1);
+                for (int j = 0; j <= 1; j++) {
+                    LinkedHashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
+                    linkedHashMap.put("skillId", skillName[j]);
+                    linkedHashMap.put("unlock", 1);
+                    linkedHashMap.put("state", 0);
+                    linkedHashMap.put("specializeLevel",charConfig.get("skillsSpecializeLevel").intValue());
+                    linkedHashMap.put("completeUpgradeTime", -1);
+                    amiyaSkills.add(linkedHashMap);
+                }
+                amiya2.put("skills", amiyaSkills);
+                amiya2.put("currentEquip", null);
+                amiya2.put("equip", new HashMap<>());
+                tmpl.put("char_002_amiya", amiya);
+                tmpl.put("char_1001_amiya2", amiya2);
+
+                innerChars.put("defaultSkillIndex", -1);
+                innerChars.put("gainTime", timeStamp);
+                innerChars.put("skills", new ArrayList<>());
+                innerChars.put("voiceLan", "JP");
+                innerChars.put("currentEquip", currentEquip.get(i));
+                innerChars.put("equip", equip.get(listChars.get(i)));
+                innerChars.put("starMark", 0);
+                innerChars.put("currentTmpl", "char_002_amiya");
+                innerChars.put("tmpl", tmpl);
+
+                chars.put(listInstId.get(i), innerChars);
+
+                continue;
+            }
+
             innerChars.put("defaultSkillIndex", defaultSkillIndex.get(i) - 1);
             innerChars.put("gainTime", timeStamp);
             innerChars.put("skills", skills.get(i));
             innerChars.put("voiceLan", "JP");
-            innerChars.put("currentEquip", null);
-            innerChars.put("equip", new HashMap());
+            innerChars.put("currentEquip", currentEquip.get(i));
+            innerChars.put("equip", equip.get(listChars.get(i)));
             innerChars.put("starMark", 0);
+
             chars.put(listInstId.get(i), innerChars);
+        }
+
+        //charGroup
+        LinkedHashMap<String, Object> charGroup = new LinkedHashMap<>();
+        for (int i = 0; i < listChars.size(); i++) {
+            charGroup.put(listChars.get(i), Map.of("favorPoint", 25570));
         }
 
 
@@ -322,10 +406,10 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         Map<String, Object> squadsMap = JsonUtils.transferToMap(loadSquads);
         troop.put("squads", squadsMap);
 
-
         troop.put("chars", chars);
-        troop.put("charGroup", 4);
-        troop.put("charMission", 4);
+
+        troop.put("charGroup", charGroup);
+        troop.put("charMission", new HashMap<>());
         troop.put("addon", 4);
 
         return troop;
