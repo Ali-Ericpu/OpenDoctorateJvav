@@ -159,24 +159,26 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         //chars
         Integer maxInstId = 0;        //curCharInstId
         ArrayList<Integer> defaultSkillIndex = new ArrayList();     //skillIndex
-        ArrayList<Integer> phases = new ArrayList();         //phases
+        ArrayList<Integer> phases = new ArrayList<>();         //phases
         Map<String, Double> charConfig = Confing.getCharConfig();
         String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
-        ArrayList listChar = new ArrayList();
-        ArrayList listInstId = new ArrayList();
-        LinkedHashMap chars = new LinkedHashMap();
-        ArrayList skillCount;
-        ArrayList evolvePhase;
-        ArrayList<Double> level = new ArrayList();
-        ArrayList<ArrayList> listLevel = new ArrayList();
-        ArrayList<ArrayList> listSkills = new ArrayList();
-        ArrayList skills = new ArrayList();
+        ArrayList<String> listChars = new ArrayList<>();         //char
+        ArrayList<Integer> listInstId = new ArrayList<>();      //instId
+        ArrayList<String> skins = new ArrayList<>();            //skin
+        String loadSkins = FileUtils.readFileToString(new File("src/main/resources/data/excel/skin_table.json"), "utf-8");
+        LinkedHashMap<Integer,Object> chars = new LinkedHashMap<>();
+        ArrayList<Integer> skillCount;
+        ArrayList<Object> evolvePhase;
+        ArrayList<Double> level = new ArrayList<>();
+        ArrayList<ArrayList> listLevel = new ArrayList<>();
+        ArrayList<ArrayList> listSkills = new ArrayList<>();
+        ArrayList<Object> skills = new ArrayList<>();
 
         Map<String, Object> mapChar = JsonUtils.transferToMap(loadChars);
-        Set<String> keySet = mapChar.keySet();
-        for (String key : keySet) {
+        Set<String> setChar = mapChar.keySet();
+        for (String key : setChar) {
             if (key.contains("char")) {
-                listChar.add(key);
+                listChars.add(key);
                 //将substring处理过后的key放入list
                 int tempInstId = Integer.parseInt(StringUtils.substringBetween(key, "_"));
                 listInstId.add(tempInstId);
@@ -185,8 +187,8 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 }
             }
         }
-        for (int i = 0; i < listChar.size(); i++) {
-            Map mapChars = (Map) mapChar.get(listChar.get(i));
+        for (int i = 0; i < listChars.size(); i++) {
+            Map mapChars = (Map) mapChar.get(listChars.get(i));
             //skillindex
             skillCount = (ArrayList) mapChars.get("skills");
             listSkills.add(i, skillCount);
@@ -213,24 +215,25 @@ public class SyncDataDAOimpl implements SyncDataDAO {
 
         //level
         if (charConfig.get("level").intValue() == -1) {
-            for (int i = 0; i < listChar.size(); i++) {
+            for (int i = 0; i < listChars.size(); i++) {
                 Map mapLevel = (Map) (listLevel.get(i).get(phases.get(i) - 1));
                 level.add((Double) mapLevel.get("maxLevel"));
             }
         } else {
-            for (int i = 0; i < listChar.size(); i++) {
+            //又不是不能用0.0
+            for (int i = 0; i < listChars.size(); i++) {
                 level.add(charConfig.get("level"));
             }
         }
         //skills
-        for (int i = 0; i < listChar.size(); i++) {
-            LinkedHashMap skillId = new LinkedHashMap();
+        for (int i = 0; i < listChars.size(); i++) {
+            LinkedHashMap<String,Object> skillId = new LinkedHashMap();
             //E2
             if ((listSkills.get(i)).size() >= 2) {
-                ArrayList list = new ArrayList();
+                ArrayList<Object> list = new ArrayList<>();
                 for (int j = 0; j < (listSkills.get(i)).size() ; j++) {
                     Map map = (Map) (listSkills.get(i).get(j));
-                    LinkedHashMap linkedHashMap = new LinkedHashMap();
+                    LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
                     linkedHashMap.put("skillId", map.get("skillId"));
                     linkedHashMap.put("unlock", 1);
                     linkedHashMap.put("state", 0);
@@ -242,28 +245,61 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 //E1
             } else if ((listSkills.get(i)).size() == 1) {
                 Map map = (Map) (listSkills.get(i).get(0));
-                LinkedHashMap linkedHashMap = new LinkedHashMap();
+                LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
                 linkedHashMap.put("skillId", map.get("skillId"));
                 linkedHashMap.put("unlock", 1);
                 linkedHashMap.put("state", 0);
                 linkedHashMap.put("specializeLevel", 0);
                 linkedHashMap.put("completeUpgradeTime", -1);
-                skills.add(new LinkedHashMap().put(i,linkedHashMap));
+                skills.add(new LinkedHashMap<>().put(i,linkedHashMap));
                 //E0
             } else if ((listSkills.get(i)).size() == 0){
-                skills.add(new ArrayList());
+                skills.add(new ArrayList<>());
+            }
+        }
+        //get all skin
+        Map<String, Object> mapCharSkin = JsonUtils.transferToMap(loadSkins);
+        Map<String,Map> mapSkins =(Map) mapCharSkin.get("charSkins");
+        HashMap<String, Map> tempSkin = new HashMap<>();
+        ArrayList<String> listSkinId = new ArrayList<>();
+        for (String s : mapSkins.keySet()) {
+            listSkinId.add(s);
+        }
+
+        for (int i = 0; i < mapSkins.size(); i++) {
+            String s0 =(String) (mapSkins.get(listSkinId.get(i))).get("skinId");
+            if(s0.contains("@")){
+                String s1 =(String) (mapSkins.get(listSkinId.get(i))).get("charId");
+                tempSkin.put(s1,Map.of("skinId", s0,
+                        "charId", s1));
+            }
+        }
+        //skins
+        int count = 0;
+        for (int i = 0; i < listChars.size(); i++) {
+            //E0&E1  expect roguelike char
+            if ((listSkills.get(i)).size() <= 1 || StringUtils.containsAny(listChars.get(i), "char_508_aguard", "char_509_acast", "char_510_amedic", "char_511_asnipe")){
+                skins.add(listChars.get(i)+"#1");
+                //E2
+            } else if ((listSkills.get(i)).size() > 1) {
+                skins.add(listChars.get(i)+"#2");
+            }
+            if (tempSkin.get(listChars.get(i)) != null &&
+                    (tempSkin.get(listChars.get(i))).get("charId").equals(listChars.get(i))) {
+                skins.set(i, (String) (tempSkin.get(listChars.get(i))).get("skinId"));
             }
         }
 
 
-        for (int i = 0; i < listChar.size(); i++) {
-            LinkedHashMap innerChars = new LinkedHashMap();
+
+        for (int i = 0; i < listChars.size(); i++) {
+            LinkedHashMap<String,Object> innerChars = new LinkedHashMap<>();
             innerChars.put("instId", listInstId.get(i));
-            innerChars.put("charId", listChar.get(i));
+            innerChars.put("charId", listChars.get(i));
             innerChars.put("favorPoint", charConfig.get("favorPoint").intValue());
             innerChars.put("potentialRank", charConfig.get("potentialRank").intValue());
             innerChars.put("mainSkillLvl", charConfig.get("mainSkillLvl").intValue());
-            innerChars.put("skin", listChar.get(i) + "#1");
+            innerChars.put("skin", skins.get(i));
             innerChars.put("level", level.get(i).intValue());
             innerChars.put("exp", 0);
             innerChars.put("evolvePhase", phases.get(i) - 1);

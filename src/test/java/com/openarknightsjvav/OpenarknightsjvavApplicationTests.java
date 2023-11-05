@@ -47,7 +47,7 @@ class OpenarknightsjvavApplicationTests {
         String loadConfig = FileUtils.readFileToString(new File("src/main/resources/data/config/config.json"), "utf-8");
         String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
 
-        ArrayList listChar = new ArrayList();
+        ArrayList<String> listChar = new ArrayList<>();
         ArrayList listInstId = new ArrayList();
         int maxInstId = 0;
 
@@ -67,6 +67,11 @@ class OpenarknightsjvavApplicationTests {
                      maxInstId = tempInstId;
                  }
             }
+        }
+        for (int i = 0; i < listChar.size(); i++) {
+            boolean b = StringUtils.containsAny(listChar.get(i), "char_508_aguard", "char_509_acast", "char_510_amedic", "char_511_asnipe");
+            System.out.println(b);
+
         }
 //        System.out.println(listChar);
         System.out.println(listChar.size());
