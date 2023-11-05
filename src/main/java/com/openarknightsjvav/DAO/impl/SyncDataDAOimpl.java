@@ -232,7 +232,6 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         }
         //skills
         for (int i = 0; i < listChars.size(); i++) {
-            LinkedHashMap<String, Object> skillId = new LinkedHashMap();
             //E2
             if ((listSkills.get(i)).size() >= 2) {
                 ArrayList<Object> list = new ArrayList<>();
@@ -256,7 +255,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 linkedHashMap.put("state", 0);
                 linkedHashMap.put("specializeLevel", 0);
                 linkedHashMap.put("completeUpgradeTime", -1);
-                skills.add(new LinkedHashMap<>().put(i, linkedHashMap));
+                skills.add(Map.of(i,linkedHashMap));
                 //E0
             } else if ((listSkills.get(i)).size() == 0) {
                 skills.add(new ArrayList<>());
@@ -429,13 +428,13 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         }
         for (int i = 0; i < listChars.size(); i++) {
             int size = 0;
-            if (handbook.get(listChars.get(i)) != null){
+            if (handbook.get(listChars.get(i)) != null) {
                 size = ((ArrayList) ((Map) handbook.get(listChars.get(i))).get("storySetId")).size();
-                if (stageData.containsKey(listChars.get(i)) && size > 0 ) {
+                if (stageData.containsKey(listChars.get(i)) && size > 0) {
                     LinkedHashMap<String, Object> story = new LinkedHashMap<>();
                     LinkedHashMap<String, Object> stage = new LinkedHashMap<>();
                     for (int j = 0; j < size; j++) {
-                        String s =(String) ((ArrayList)((HashMap) handbook.get(listChars.get(i))).get("storySetId")).get(j);
+                        String s = (String) ((ArrayList) ((HashMap) handbook.get(listChars.get(i))).get("storySetId")).get(j);
                         story.put(s, Map.of("fts", 1649232340,
                                 "rts", 1649232340));
                     }
@@ -446,12 +445,12 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                     linkedHashMap.put("fts", 1624284657);
                     linkedHashMap.put("rts", 1624284657);
                     linkedHashMap.put("startTime", 2);
-                    stage.put((String) ((Map)stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
+                    stage.put((String) ((Map) stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
                     LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
-                    map.put("story",story);
-                    map.put("stage",stage);
+                    map.put("story", story);
+                    map.put("stage", stage);
                     addon.put(listChars.get(i), map);
-                } else if (stageData.containsKey(listChars.get(i)) && size < 0 ) {
+                } else if (stageData.containsKey(listChars.get(i)) && size < 0) {
                     LinkedHashMap<String, Object> stage = new LinkedHashMap<>();
                     LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
                     linkedHashMap.put("startTimes", 0);
@@ -460,32 +459,32 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                     linkedHashMap.put("fts", 1624284657);
                     linkedHashMap.put("rts", 1624284657);
                     linkedHashMap.put("startTime", 2);
-                    stage.put((String) ((Map)stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
+                    stage.put((String) ((Map) stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
                     LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
-                    map.put("story",new HashMap<>());
-                    map.put("stage",stage);
+                    map.put("story", new HashMap<>());
+                    map.put("stage", stage);
                     addon.put(listChars.get(i), map);
 
-                } else if (! stageData.containsKey(listChars.get(i)) && size > 0) {
+                } else if (!stageData.containsKey(listChars.get(i)) && size > 0) {
                     LinkedHashMap<String, Object> story = new LinkedHashMap<>();
                     for (int j = 0; j < size; j++) {
-                        String s =(String) ((ArrayList)((Map) handbook.get(listChars.get(i))).get("storySetId")).get(j);
+                        String s = (String) ((ArrayList) ((Map) handbook.get(listChars.get(i))).get("storySetId")).get(j);
                         story.put(s, Map.of("fts", 1649232340,
                                 "rts", 1649232340));
                     }
                     LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
-                    map.put("story",story);
+                    map.put("story", story);
                     addon.put(listChars.get(i), map);
 
                 } else {
                     HashMap<Object, Object> hashMap = new HashMap<>();
-                    hashMap.put("story",new HashMap<>());
-                    addon.put(listChars.get(i),hashMap);
+                    hashMap.put("story", new HashMap<>());
+                    addon.put(listChars.get(i), hashMap);
                 }
-            } else if ( handbook.get(listChars.get(i)) == null) {
+            } else if (handbook.get(listChars.get(i)) == null) {
                 HashMap<Object, Object> hashMap = new HashMap<>();
-                hashMap.put("story",new HashMap<>());
-                addon.put(listChars.get(i),hashMap);
+                hashMap.put("story", new HashMap<>());
+                addon.put(listChars.get(i), hashMap);
             }
         }
 
