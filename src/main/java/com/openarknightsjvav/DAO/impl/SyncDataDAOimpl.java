@@ -158,6 +158,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
         String loadSkins = FileUtils.readFileToString(new File("src/main/resources/data/excel/skin_table.json"), "utf-8");
         String loadEquip = FileUtils.readFileToString(new File("src/main/resources/data/excel/uniequip_table.json"), "utf-8");
+        String loadAddon = FileUtils.readFileToString(new File("src/main/resources/data/excel/handbook_info_table.json"), "utf-8");
 
         //chars
         Integer maxInstId = 0;        //curCharInstId
@@ -169,14 +170,14 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         ArrayList<String> skins = new ArrayList<>();            //skin
         ArrayList<String> currentEquip = new ArrayList<>();     //currentEquip
         LinkedHashMap<String, LinkedHashMap> equip = new LinkedHashMap<>();     //equip
-        LinkedHashMap<Integer, Object> chars = new LinkedHashMap<>();
+        LinkedHashMap<Integer, Object> chars = new LinkedHashMap<>();   //chars
+        HashMap<Object, Object> addon = new HashMap<>();
         ArrayList<Integer> skillCount;
         ArrayList<Object> evolvePhase;
         ArrayList<Double> level = new ArrayList<>();
         ArrayList<ArrayList> listLevel = new ArrayList<>();
         ArrayList<ArrayList> listSkills = new ArrayList<>();
         ArrayList<Object> skills = new ArrayList<>();
-
 
         Map<String, Object> mapChar = JsonUtils.transferToMap(loadChars);
         Set<String> setChar = mapChar.keySet();
@@ -341,7 +342,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 LinkedHashMap<String, Object> amiya2 = new LinkedHashMap<>();
                 LinkedHashMap<Object, Object> tmpl = new LinkedHashMap<>();
                 ArrayList<LinkedHashMap> amiyaSkills = new ArrayList<>();
-                String[] skillName= {"skchr_amiya2_1","skchr_amiya2_2"};
+                String[] skillName = {"skchr_amiya2_1", "skchr_amiya2_2"};
 
                 amiya.put("skinId", "char_002_amiya@winter#1");
                 amiya.put("defaultSkillIndex", 2);
@@ -355,7 +356,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                     linkedHashMap.put("skillId", skillName[j]);
                     linkedHashMap.put("unlock", 1);
                     linkedHashMap.put("state", 0);
-                    linkedHashMap.put("specializeLevel",charConfig.get("skillsSpecializeLevel").intValue());
+                    linkedHashMap.put("specializeLevel", charConfig.get("skillsSpecializeLevel").intValue());
                     linkedHashMap.put("completeUpgradeTime", -1);
                     amiyaSkills.add(linkedHashMap);
                 }
@@ -390,27 +391,115 @@ public class SyncDataDAOimpl implements SyncDataDAO {
 
             chars.put(listInstId.get(i), innerChars);
         }
-
         //charGroup
         LinkedHashMap<String, Object> charGroup = new LinkedHashMap<>();
         for (int i = 0; i < listChars.size(); i++) {
             charGroup.put(listChars.get(i), Map.of("favorPoint", 25570));
+        }
+        //squads
+        String loadSquads = FileUtils.readFileToString(new File("src/main/resources/data/config/squads.json"), "utf-8");
+        Map<String, Object> squadsMap = JsonUtils.transferToMap(loadSquads);
+        //addon
+        Map<String, Object> mapAddon = JsonUtils.transferToMap(loadAddon);
+        HashMap<Object, Object> handbook = new HashMap<>();
+        Map<String, Object> handbookDict = (Map) mapAddon.get("handbookDict");
+        for (String charId : handbookDict.keySet()) {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            ArrayList<String> storySetId = new ArrayList<>();
+            if (((Map) handbookDict.get(charId)).get("handbookAvgList") != null) {
+                int size = ((ArrayList) ((Map) handbookDict.get(charId)).get("handbookAvgList")).size();
+                for (int i = 0; i < size; i++) {
+                    String s = (String) ((Map) ((ArrayList) ((Map) handbookDict.get(charId)).get("handbookAvgList")).get(i)).get("storySetId");
+                    storySetId.add(s);
+                }
+                hashMap.put("charId", charId);
+                hashMap.put("storySetId", storySetId);
+                handbook.put(charId, hashMap);
+            } else {
+                hashMap.put("charId", charId);
+                handbook.put(charId, new HashMap<>());
+            }
+        }
+        HashMap<String, Object> stageData = new HashMap<>();
+        Map<String, Object> handbookStageData = (Map) mapAddon.get("handbookStageData");
+        for (String CharId : handbookStageData.keySet()) {
+            String stageId = (String) ((Map) handbookStageData.get(CharId)).get("stageId");
+            stageData.put(CharId, Map.of("charId", CharId,
+                    "stageId", stageId));
+        }
+        for (int i = 0; i < listChars.size(); i++) {
+            int size = 0;
+            if (handbook.get(listChars.get(i)) != null){
+                size = ((ArrayList) ((Map) handbook.get(listChars.get(i))).get("storySetId")).size();
+                if (stageData.containsKey(listChars.get(i)) && size > 0 ) {
+                    LinkedHashMap<String, Object> story = new LinkedHashMap<>();
+                    LinkedHashMap<String, Object> stage = new LinkedHashMap<>();
+                    for (int j = 0; j < size; j++) {
+                        String s =(String) ((ArrayList)((HashMap) handbook.get(listChars.get(i))).get("storySetId")).get(j);
+                        story.put(s, Map.of("fts", 1649232340,
+                                "rts", 1649232340));
+                    }
+                    LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+                    linkedHashMap.put("startTimes", 0);
+                    linkedHashMap.put("completeTimes", 1);
+                    linkedHashMap.put("state", 3);
+                    linkedHashMap.put("fts", 1624284657);
+                    linkedHashMap.put("rts", 1624284657);
+                    linkedHashMap.put("startTime", 2);
+                    stage.put((String) ((Map)stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
+                    LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
+                    map.put("story",story);
+                    map.put("stage",stage);
+                    addon.put(listChars.get(i), map);
+                } else if (stageData.containsKey(listChars.get(i)) && size < 0 ) {
+                    LinkedHashMap<String, Object> stage = new LinkedHashMap<>();
+                    LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+                    linkedHashMap.put("startTimes", 0);
+                    linkedHashMap.put("completeTimes", 1);
+                    linkedHashMap.put("state", 3);
+                    linkedHashMap.put("fts", 1624284657);
+                    linkedHashMap.put("rts", 1624284657);
+                    linkedHashMap.put("startTime", 2);
+                    stage.put((String) ((Map)stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
+                    LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
+                    map.put("story",new HashMap<>());
+                    map.put("stage",stage);
+                    addon.put(listChars.get(i), map);
+
+                } else if (! stageData.containsKey(listChars.get(i)) && size > 0) {
+                    LinkedHashMap<String, Object> story = new LinkedHashMap<>();
+                    for (int j = 0; j < size; j++) {
+                        String s =(String) ((ArrayList)((Map) handbook.get(listChars.get(i))).get("storySetId")).get(j);
+                        story.put(s, Map.of("fts", 1649232340,
+                                "rts", 1649232340));
+                    }
+                    LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
+                    map.put("story",story);
+                    addon.put(listChars.get(i), map);
+
+                } else {
+                    HashMap<Object, Object> hashMap = new HashMap<>();
+                    hashMap.put("story",new HashMap<>());
+                    addon.put(listChars.get(i),hashMap);
+                }
+            } else if ( handbook.get(listChars.get(i)) == null) {
+                HashMap<Object, Object> hashMap = new HashMap<>();
+                hashMap.put("story",new HashMap<>());
+                addon.put(listChars.get(i),hashMap);
+            }
         }
 
 
         troop.put("curCharInstId", maxInstId);
         troop.put("curSquadCount", 4);
 
-        //config
-        String loadSquads = FileUtils.readFileToString(new File("src/main/resources/data/config/squads.json"), "utf-8");
-        Map<String, Object> squadsMap = JsonUtils.transferToMap(loadSquads);
         troop.put("squads", squadsMap);
 
         troop.put("chars", chars);
 
         troop.put("charGroup", charGroup);
         troop.put("charMission", new HashMap<>());
-        troop.put("addon", 4);
+        troop.put("addon", addon);
 
         return troop;
     }
