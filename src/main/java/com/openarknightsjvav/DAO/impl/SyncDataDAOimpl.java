@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static cn.hutool.core.util.NumberUtil.add;
+
 /**
  * ClassName: SyncDataDAOimpl
  * Package: com.openarknightsjvav.DAO.impl
@@ -30,13 +32,9 @@ public class SyncDataDAOimpl implements SyncDataDAO {
 
         LinkedHashMap dungeon = new LinkedHashMap();
         ArrayList listCowLevel = new ArrayList();
-        //读取json转为string
         String stage = FileUtils.readFileToString(new File("src/main/resources/data/excel/stage_table.json"), "utf-8");
-        //调用工具类将读取到的字符串转化为map
         Map<String, Object> map = JsonUtils.transferToMap(stage);
-        //获取key为stages的value并重新封装为一个map
         Map stagesKey = (Map) map.get("stages");
-        //遍历stages的所有key并封装到list中
         ArrayList listStages = new ArrayList();
         for (Object key : stagesKey.keySet()) {
             listStages.add(key);
@@ -44,8 +42,6 @@ public class SyncDataDAOimpl implements SyncDataDAO {
             if (s.contains("spst")) {
                 listCowLevel.add(s);
             }
-//            System.out.println(list);
-
         }
         LinkedHashMap putStages = new LinkedHashMap();
         LinkedHashMap stages = new LinkedHashMap();
@@ -60,7 +56,6 @@ public class SyncDataDAOimpl implements SyncDataDAO {
             innerStages.put("state", 3);
             putStages.put(listStages.get(i), innerStages);
             stages.putAll(putStages);
-
         }
         dungeon.put("stages", stages);
 
@@ -88,11 +83,22 @@ public class SyncDataDAOimpl implements SyncDataDAO {
 
     @Override
     public LinkedHashMap getStatus() throws IOException {
-        LinkedHashMap status = new LinkedHashMap();
+        LinkedHashMap<String, Object> status = new LinkedHashMap();
         LinkedHashMap flags = new LinkedHashMap();
-        //config
-        status.put("nickName", "Doctorate");
+        //flags
+        flags.put("init", 1);
+        String s = FileUtils.readFileToString(new File("src/main/resources/data/excel/story_table.json"), "utf-8");
+        Map<String, Object> flagsMap = JsonUtils.transferToMap(s);
+        Set<String> keySet = flagsMap.keySet();
+        for (String key : keySet) {
+            flags.put(key, 1);
+        }
+        //avatar
+        LinkedHashMap avatar = new LinkedHashMap();
+        avatar.put("type", "ICON");
+        avatar.put("id", "avatar_activity_RI");
 
+        status.put("nickName", "Doctorate");//config
         status.put("nickNumber", "1111");
         status.put("level", 120);
         status.put("exp", "0");
@@ -107,16 +113,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         status.put("buyApRemainTimes", 99);
         status.put("apLimitUpFlag", 0);
         status.put("uid", "1111");
-
-        flags.put("init", 1);
-        String s = FileUtils.readFileToString(new File("src/main/resources/data/excel/story_table.json"), "utf-8");
-        Map<String, Object> flagsMap = JsonUtils.transferToMap(s);
-        Set<String> keySet = flagsMap.keySet();
-        for (String key : keySet) {
-            flags.put(key, 1);
-        }
         status.put("flags", flags);
-
         status.put("ap", 130);
         status.put("maxAp", 130);
         status.put("androidDiamond", 0);
@@ -135,19 +132,11 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         status.put("friendNumLimit", 999);
         status.put("monthlySubscriptionStartTime", 0);
         status.put("monthlySubscriptionEndTime", 0);
-        //config
-        status.put("secretary", "char_249_mlyss");
-        status.put("secretarySkinId", "char_249_mlyss#2");
-
+        status.put("secretary", "char_249_mlyss");          //config
+        status.put("secretarySkinId", "char_249_mlyss#2");  //config
         status.put("tipMonthlyCardExpireTs", 0);
-        //config
-        LinkedHashMap avatar = new LinkedHashMap();
-        avatar.put("type", "ICON");
-        avatar.put("id", "avatar_activity_RI");
-        status.put("avatar", avatar);
-
-        //config
-        status.put("globalVoiceLan", "JP");
+        status.put("avatar", avatar);       //config
+        status.put("globalVoiceLan", "JP");     //config
 
         return status;
     }
@@ -180,11 +169,9 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         ArrayList<Object> skills = new ArrayList<>();
 
         Map<String, Object> mapChar = JsonUtils.transferToMap(loadChars);
-        Set<String> setChar = mapChar.keySet();
-        for (String key : setChar) {
+        for (String key : mapChar.keySet()) {
             if (key.contains("char")) {
                 listChars.add(key);
-                //将substring处理过后的key放入list
                 int tempInstId = Integer.parseInt(StringUtils.substringBetween(key, "_"));
                 listInstId.add(tempInstId);
                 if (tempInstId > maxInstId) {
@@ -255,7 +242,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 linkedHashMap.put("state", 0);
                 linkedHashMap.put("specializeLevel", 0);
                 linkedHashMap.put("completeUpgradeTime", -1);
-                skills.add(Map.of(i,linkedHashMap));
+                skills.add(Map.of(i, linkedHashMap));
                 //E0
             } else if ((listSkills.get(i)).size() == 0) {
                 skills.add(new ArrayList<>());
@@ -501,6 +488,105 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         troop.put("addon", addon);
 
         return troop;
+    }
+
+    @Override
+    public LinkedHashMap getNpcAudio() {
+        LinkedHashMap<Object, Object> npcAudio = new LinkedHashMap<>();
+        Map audio = Map.of("npcShowAudioInfoFlag", "CN_MANDARIN");
+        npcAudio.put("char_511_asnipe", audio);
+        npcAudio.put("char_510_amedic", audio);
+        npcAudio.put("char_508_aguard", audio);
+        npcAudio.put("char_509_acast", audio);
+        npcAudio.put("char_513_apionr", audio);
+        return npcAudio;
+    }
+
+    @Override
+    public LinkedHashMap getPushFlags() throws IOException {
+        String loadMail = FileUtils.readFileToString(new File("src/main/resources/data/config/mails.json"), "utf-8");
+        LinkedHashMap<String, Object> pushFlags = new LinkedHashMap<>();
+        Map<String, Object> mail = JsonUtils.transferToMap(loadMail);
+        pushFlags.put("hasGifts", ((Map) mail.get("mailList")).size());
+        pushFlags.put("hasFriendRequest", 0);
+        pushFlags.put("hasClues", 0);
+        pushFlags.put("hasFreeLevelGP", 0);
+        pushFlags.put("status", 1672502400);
+
+        return pushFlags;
+    }
+
+    @Override
+    public Map getSkin() throws IOException {
+        LinkedHashMap<String, Object> characterSkins = new LinkedHashMap<>();
+        String loadSkin = FileUtils.readFileToString(new File("src/main/resources/data/excel/skin_table.json"), "utf-8");
+        Map<String, Object> skins = (Map) JsonUtils.transferToMap(loadSkin).get("charSkins");
+        for (String key : skins.keySet()) {
+            String skinId = (String) ((Map) skins.get(key)).get("skinId");
+            if (skinId.contains("char") && skinId.contains("@")) {
+                characterSkins.put(skinId, 1);
+            }
+        }
+
+        return Map.of("characterSkins", characterSkins);
+    }
+
+    @Override
+    public Map getMission() {
+        //
+        return new HashMap<>();
+    }
+
+
+    @Override
+    public Map getDexNav() throws IOException {
+        String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
+        LinkedHashMap<String, Object> character = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> dexNav = new LinkedHashMap<>();
+        Map<String, Object> chars = JsonUtils.transferToMap(loadChars);
+        for (String key : chars.keySet()) {
+            String charInstId = StringUtils.substringBetween(key, "_");
+            if (!key.contains("char")){
+                continue;
+            }
+            LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+            linkedHashMap.put("charInstId",charInstId);
+            linkedHashMap.put("count",6);       //config maybe
+            character.put(key,linkedHashMap);
+        }
+        dexNav.put("character",character);
+        dexNav.put("formula",new HashMap<>());
+        dexNav.put("enemy",new HashMap<>());
+        dexNav.put("teamV2",new HashMap<>());
+
+
+
+        return dexNav;
+    }
+
+    @Override
+    public LinkedHashMap<String, Object> getBackFlow() {
+        LinkedHashMap<String, Object> backFlow = new LinkedHashMap<>();
+        backFlow.put("open", true);
+        backFlow.put("current", null);
+        return backFlow;
+    }
+
+    @Override
+    public LinkedHashMap getAvatar() throws IOException {
+        LinkedHashMap<String,Object> avatar_icon = new LinkedHashMap<>();
+        LinkedHashMap<String,Object> avatarId = new LinkedHashMap<>();
+        String loadAvatar = FileUtils.readFileToString(new File("src/main/resources/data/excel/display_meta_table.json"), "utf-8");
+        Map<String, Object> mapAvatar = (Map)JsonUtils.transferToMap(loadAvatar).get("playerAvatarData");
+        ArrayList avatarList =(ArrayList) mapAvatar.get("avatarList");
+        for (int i = 0; i < avatarList.size(); i++) {
+            LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+            linkedHashMap.put("ts", timeStamp);
+            linkedHashMap.put("src", "other");
+            avatarId.put((String) ((Map)avatarList.get(i)).get("avatarId"), linkedHashMap);
+        }
+        avatar_icon.put("avatar_icon", avatarId);
+        return avatar_icon;
     }
 
 }
