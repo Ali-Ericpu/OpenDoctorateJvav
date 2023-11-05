@@ -222,17 +222,13 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 level.add(charConfig.get("level"));
             }
         }
-        int count0 = 0;
-        int count1 = 0;
         //skills
         for (int i = 0; i < listChar.size(); i++) {
-            count0++;
             LinkedHashMap skillId = new LinkedHashMap();
-            int k = (listSkills.get(i)).size();
-            if (k == 2 || k == 3) {
-                count1++;
+            //E2
+            if ((listSkills.get(i)).size() >= 2) {
                 ArrayList list = new ArrayList();
-                for (int j = 0; j < k ; j++) {
+                for (int j = 0; j < (listSkills.get(i)).size() ; j++) {
                     Map map = (Map) (listSkills.get(i).get(j));
                     LinkedHashMap linkedHashMap = new LinkedHashMap();
                     linkedHashMap.put("skillId", map.get("skillId"));
@@ -243,7 +239,8 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                     list.add(linkedHashMap);
                 }
                 skills.add(list);
-            } else if (k == 1) {
+                //E1
+            } else if ((listSkills.get(i)).size() == 1) {
                 Map map = (Map) (listSkills.get(i).get(0));
                 LinkedHashMap linkedHashMap = new LinkedHashMap();
                 linkedHashMap.put("skillId", map.get("skillId"));
@@ -251,15 +248,13 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                 linkedHashMap.put("state", 0);
                 linkedHashMap.put("specializeLevel", 0);
                 linkedHashMap.put("completeUpgradeTime", -1);
-                skills.add(linkedHashMap);
-
-                skills.add(skillId);
-            } else if (k == 0){
+                skills.add(new LinkedHashMap().put(i,linkedHashMap));
+                //E0
+            } else if ((listSkills.get(i)).size() == 0){
                 skills.add(new ArrayList());
             }
         }
-        System.out.println(count0);
-        System.out.println(count1);
+
 
         for (int i = 0; i < listChar.size(); i++) {
             LinkedHashMap innerChars = new LinkedHashMap();
