@@ -1,6 +1,9 @@
 package com.openarknightsjvav.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
+import com.google.gson.ToNumberStrategy;
 import com.google.gson.reflect.TypeToken;
 import ognl.Ognl;
 import ognl.OgnlContext;
@@ -19,7 +22,7 @@ public class JsonUtils {
      * @return 动态的Map集合
      */
     public static Map<String, Object> transferToMap(String json) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create();
         Map<String, Object> map = gson.fromJson(json,
                 new TypeToken<Map<String, Object>>() {
                 }.getType());

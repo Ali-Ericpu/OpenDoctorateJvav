@@ -28,6 +28,7 @@ public class SyncDataController {
 
     @PostMapping("/account/syncData")
     public Result getSyncData() throws IOException {
+        log.info("------SyncData------");
         Map syncData = syncDataService.getSyncData();
         return Result.sendSyncData(syncData);
     }

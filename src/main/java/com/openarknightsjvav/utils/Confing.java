@@ -35,4 +35,13 @@ public class Confing {
     public static Map getTowerConfig() throws IOException {
         return (Map) getConfig().get("towerConfig");
     }
+
+    public static Map getNetworkConfig() throws IOException {
+        return (Map) getConfig().get("networkConfig");
+    }
+
+    public static Map getServerConfig() throws IOException {
+        return (Map) getConfig().get("serverConfig");
+    }
+
 }

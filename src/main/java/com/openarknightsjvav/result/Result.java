@@ -1,5 +1,7 @@
 package com.openarknightsjvav.result;
 
+import lombok.Data;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -12,11 +14,13 @@ import java.util.LinkedHashMap;
  * @Create 2023/11/2 19:19
  * @Version 1.0
  */
+@Data
 public class Result {
     private Integer result;
     private Long ts;
     private Object user;
     private LinkedHashMap playerDataDelta;
+
 
     public Result() {
     }
@@ -28,6 +32,7 @@ public class Result {
         this.playerDataDelta = playerDataDelta;
     }
 
+
     public static Result sendSyncData(Object user) {
         Long time = System.currentTimeMillis() / 1000;
         LinkedHashMap linkedHashMap = new LinkedHashMap();
@@ -36,35 +41,5 @@ public class Result {
         return new Result(0, time, user, linkedHashMap);
     }
 
-    public Integer getResult() {
-        return result;
-    }
 
-    public void setResult(Integer result) {
-        this.result = result;
-    }
-
-    public Long getTs() {
-        return ts;
-    }
-
-    public void setTs(Long ts) {
-        this.ts = ts;
-    }
-
-    public Object getUser() {
-        return user;
-    }
-
-    public void setUser(Object user) {
-        this.user = user;
-    }
-
-    public LinkedHashMap getPlayerDataDelta() {
-        return playerDataDelta;
-    }
-
-    public void setPlayerDataDelta(LinkedHashMap playerDataDelta) {
-        this.playerDataDelta = playerDataDelta;
-    }
 }
