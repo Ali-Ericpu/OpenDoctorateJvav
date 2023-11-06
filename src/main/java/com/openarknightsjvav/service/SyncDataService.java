@@ -2,6 +2,7 @@ package com.openarknightsjvav.service;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * ClassName: syncDataService
@@ -14,6 +15,6 @@ import java.util.LinkedHashMap;
  */
 
 public interface SyncDataService {
-    LinkedHashMap getSyncData() throws IOException;
+    Map getSyncData() throws IOException;
 
 }

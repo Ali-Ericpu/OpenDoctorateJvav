@@ -1,10 +1,18 @@
 package com.openarknightsjvav.service.impl;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.openarknightsjvav.DAO.impl.SyncDataDAOimpl;
 import com.openarknightsjvav.service.SyncDataService;
+import com.openarknightsjvav.utils.JsonUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +36,16 @@ public class SyncDataServiceImpl implements SyncDataService {
 
 
     @Override
-    public LinkedHashMap getSyncData() throws IOException {
+    public Map getSyncData() throws IOException {
 
-        LinkedHashMap syncData = new LinkedHashMap();
+        File file = new File("src/main/resources/syncData.json");
+
+        if (file.exists()){
+            String loadSynvData = FileUtils.readFileToString(file);
+            return JsonUtils.transferToMap(loadSynvData);
+        }
+
+        Map syncData = new HashMap();
 
         //dungoen
         syncData.put("dungeon", syncDataDAOimpl.getDungeon());
@@ -148,6 +163,10 @@ public class SyncDataServiceImpl implements SyncDataService {
 
         //car
         syncData.put("car", syncDataDAOimpl.getCar());
+
+        Gson gson = new Gson();
+
+        FileUtils.writeStringToFile(new File("src/main/resources/syncData.json"), gson.toJson(syncData), "utf-8");
 
         return syncData;
     }
