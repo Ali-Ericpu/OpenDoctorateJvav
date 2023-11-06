@@ -1,5 +1,7 @@
 package com.openarknightsjvav;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.map.TableMap;
 import com.openarknightsjvav.utils.JsonUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -8,9 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootTest
 class OpenarknightsjvavApplicationTests {
@@ -81,10 +81,24 @@ class OpenarknightsjvavApplicationTests {
 
     @Test
     void testConfig() throws IOException {
-        String loadConfig = FileUtils.readFileToString(new File("src/main/resources/data/config/config.json"), "utf-8");
-        Map<String, Object> mapConfig = JsonUtils.transferToMap(loadConfig);
-        Map charConfig = (Map) mapConfig.get("charConfig");
-        System.out.println(charConfig);
+        String loadActivity = FileUtils.readFileToString(new File("src/main/resources/data/excel/activity_table.json"), "utf-8");
+        Map Activity = JsonUtils.getValue(loadActivity, "activity.TYPE_ACT17SIDE.act17side", Map.class);
+        Map<String, Object> archiveItemUnlockDataMap = (Map) Activity.get("archiveItemUnlockDataMap");
+        ArrayList<Object> listChapterId = new ArrayList<>();
+        ArrayList<Object> listItemId = new ArrayList<>();
+        HashMap<String, Object> mapChapter = new HashMap<>();
+        List list = new ArrayList<>();
+        for (String key : archiveItemUnlockDataMap.keySet()) {
+            if (key.contains("log")){
+                String chapterId = (String)((Map) archiveItemUnlockDataMap.get(key)).get("chapterId");
+                String itemId = (String)((Map) archiveItemUnlockDataMap.get(key)).get("itemId");
+                mapChapter.put(key,Map.of("chapterId",chapterId,"itemId",itemId));
+                list.add(MapUtil.of(chapterId,itemId));
+            }
+        }
+        Map listMap = MapUtil.toListMap(list);
+        System.out.println(listMap);
+
     }
 
 }

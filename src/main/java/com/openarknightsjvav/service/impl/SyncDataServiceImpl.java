@@ -73,8 +73,46 @@ public class SyncDataServiceImpl implements SyncDataService {
         syncData.put("mainline", Map.of("record", new HashMap<>(), "cache", new ArrayList<>(), "version", 1));
 
         //avatar
-        syncData.put("avatar", syncDataDAOimpl.getAvatar());
+        syncData.put("avatar", syncDataDAOimpl.getAvatarAndBackground().get(0));
 
+        //background
+        syncData.put("background", syncDataDAOimpl.getAvatarAndBackground().get(1));
+
+        //medal
+        syncData.put("medal", new HashMap<>());
+
+        //homeTheme
+        syncData.put("homeTheme", syncDataDAOimpl.getAvatarAndBackground().get(2));
+
+        //rlv2
+        syncData.put("rlv2", syncDataDAOimpl.getRlv2());
+
+        //deepSea
+        syncData.put("deepSea", syncDataDAOimpl.getDeepSea());
+
+        //rlv2
+        syncData.put("tower", syncDataDAOimpl.getTower());
+
+        //siracusaMap
+        syncData.put("siracusaMap", syncDataDAOimpl.getSiracusaMap());
+
+        //storyreview
+        syncData.put("storyreview", new HashMap<>());
+
+        //setting
+        syncData.put("setting", new HashMap<>());
+
+        //openServer
+        syncData.put("openServer", new HashMap<>());
+
+        //aprilFool
+        syncData.put("aprilFool", new HashMap<>());
+
+        //tshop
+        syncData.put("tshop", new HashMap<>());
+
+        //retro
+        syncData.put("retro", syncDataDAOimpl.getRetro());
 
 
 

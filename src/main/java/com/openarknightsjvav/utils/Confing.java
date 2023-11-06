@@ -25,7 +25,14 @@ public class Confing {
 
 
     public static Map getCharConfig() throws IOException {
-        Map Charconfig =(Map) getConfig().get("charConfig");
-        return Charconfig;
+        return (Map) getConfig().get("charConfig");
+    }
+
+    public static Map getUserConfig() throws IOException {
+        return (Map) getConfig().get("userConfig");
+    }
+
+    public static Map getTowerConfig() throws IOException {
+        return (Map) getConfig().get("towerConfig");
     }
 }

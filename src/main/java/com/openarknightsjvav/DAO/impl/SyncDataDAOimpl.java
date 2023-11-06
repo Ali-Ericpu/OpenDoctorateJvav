@@ -1,5 +1,6 @@
 package com.openarknightsjvav.DAO.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.openarknightsjvav.DAO.SyncDataDAO;
 import com.openarknightsjvav.utils.Confing;
 import com.openarknightsjvav.utils.JsonUtils;
@@ -10,8 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import static cn.hutool.core.util.NumberUtil.add;
 
 /**
  * ClassName: SyncDataDAOimpl
@@ -301,7 +300,7 @@ public class SyncDataDAOimpl implements SyncDataDAO {
                     HashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
                     linkedHashMap.put("hide", 0);
                     linkedHashMap.put("locked", 0);
-                    linkedHashMap.put("level", j > 0 ? 3 : 1);    //又不是不能用0.0
+                    linkedHashMap.put("level", j > 0 ? 3 : 1);    //又不是不能用0.0   maybe config
                     hashMap.put(((ArrayList<?>) listEquip.get(listChars.get(i)).get("listEquip")).get(j), linkedHashMap);
                 }
                 equip.put(listChars.get(i), hashMap);
@@ -546,19 +545,18 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         Map<String, Object> chars = JsonUtils.transferToMap(loadChars);
         for (String key : chars.keySet()) {
             String charInstId = StringUtils.substringBetween(key, "_");
-            if (!key.contains("char")){
+            if (!key.contains("char")) {
                 continue;
             }
             LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
-            linkedHashMap.put("charInstId",charInstId);
-            linkedHashMap.put("count",6);       //config maybe
-            character.put(key,linkedHashMap);
+            linkedHashMap.put("charInstId", charInstId);
+            linkedHashMap.put("count", 6);       //config maybe
+            character.put(key, linkedHashMap);
         }
-        dexNav.put("character",character);
-        dexNav.put("formula",new HashMap<>());
-        dexNav.put("enemy",new HashMap<>());
-        dexNav.put("teamV2",new HashMap<>());
-
+        dexNav.put("character", character);
+        dexNav.put("formula", new HashMap<>());
+        dexNav.put("enemy", new HashMap<>());
+        dexNav.put("teamV2", new HashMap<>());
 
 
         return dexNav;
@@ -573,20 +571,188 @@ public class SyncDataDAOimpl implements SyncDataDAO {
     }
 
     @Override
-    public LinkedHashMap getAvatar() throws IOException {
-        LinkedHashMap<String,Object> avatar_icon = new LinkedHashMap<>();
-        LinkedHashMap<String,Object> avatarId = new LinkedHashMap<>();
+    public ArrayList<Map> getAvatarAndBackground() throws IOException {
+        ArrayList<Map> getAvatarAndBackground = new ArrayList<>();
+        LinkedHashMap<String, Object> avatar_icon = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> avatarId = new LinkedHashMap<>();
+        LinkedHashMap<Object, Object> bgs = new LinkedHashMap<>();
+        LinkedHashMap<Object, Object> background = new LinkedHashMap<>();
+        LinkedHashMap<Object, Object> themes = new LinkedHashMap<>();
+        LinkedHashMap<Object, Object> homeTheme = new LinkedHashMap<>();
+        //avatar
         String loadAvatar = FileUtils.readFileToString(new File("src/main/resources/data/excel/display_meta_table.json"), "utf-8");
-        Map<String, Object> mapAvatar = (Map)JsonUtils.transferToMap(loadAvatar).get("playerAvatarData");
-        ArrayList avatarList =(ArrayList) mapAvatar.get("avatarList");
-        for (int i = 0; i < avatarList.size(); i++) {
+        Map<String, Object> mapAvatar = (Map) JsonUtils.transferToMap(loadAvatar).get("playerAvatarData");
+        ArrayList listAvatar = (ArrayList) mapAvatar.get("avatarList");
+        for (int i = 0; i < listAvatar.size(); i++) {
             LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
             linkedHashMap.put("ts", timeStamp);
             linkedHashMap.put("src", "other");
-            avatarId.put((String) ((Map)avatarList.get(i)).get("avatarId"), linkedHashMap);
+            avatarId.put((String) ((Map) listAvatar.get(i)).get("avatarId"), linkedHashMap);
         }
+        //background
+        Map<String, Object> mapBackground = (Map) JsonUtils.transferToMap(loadAvatar).get("homeBackgroundData");
+        ArrayList listBackground = (ArrayList) mapBackground.get("homeBgDataList");
+        for (int i = 0; i < listBackground.size(); i++) {
+            bgs.put(((Map) listBackground.get(i)).get("bgId"), Map.of("unlock", timeStamp));
+        }
+        //theme
+        ArrayList listTheme = (ArrayList) mapBackground.get("themeList");
+        for (int i = 0; i < listTheme.size(); i++) {
+            themes.put(((Map) listTheme.get(i)).get("id"), Map.of("unlock", 1695000000));
+        }
+
         avatar_icon.put("avatar_icon", avatarId);
-        return avatar_icon;
+        background.put("selected", Confing.getUserConfig().get("background"));
+        background.put("bgs", bgs);
+        homeTheme.put("selected", Confing.getUserConfig().get("theme"));
+        homeTheme.put("themes", themes);
+        getAvatarAndBackground.add(avatar_icon);
+        getAvatarAndBackground.add(background);
+        getAvatarAndBackground.add(homeTheme);
+        return getAvatarAndBackground;
     }
+
+    @Override
+    public Map getRlv2() throws IOException {
+        String loadRlv2 = FileUtils.readFileToString(new File("src/main/resources/data/config/rlv2.json"), "utf-8");
+        return JsonUtils.transferToMap(loadRlv2);
+    }
+
+    @Override
+    public LinkedHashMap getDeepSea() throws IOException {
+        LinkedHashMap<String, Object> deepSea = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> places = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> nodes = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> choices = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> events = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> treasures = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> stories = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> techTrees = new LinkedHashMap<>();
+        Map<String, Object> logs = new HashMap<>();
+        String loadActivity = FileUtils.readFileToString(new File("src/main/resources/data/excel/activity_table.json"), "utf-8");
+        //ognl
+        Map Activity = JsonUtils.getValue(loadActivity, "activity.TYPE_ACT17SIDE.act17side", Map.class);
+        //places
+        Map<String, Object> placeDataMap = (Map) Activity.get("placeDataMap");
+        for (String key : placeDataMap.keySet()) {
+            places.put(key, 2);
+        }
+        //nodes
+        Map<String, Object> nodeInfoDataMap = (Map) Activity.get("nodeInfoDataMap");
+        for (String key : nodeInfoDataMap.keySet()) {
+            nodes.put(key, 2);
+        }
+        //choices
+        Map<String, Object> choiceNodeDataMap = (Map) Activity.get("choiceNodeDataMap");
+        for (String key : choiceNodeDataMap.keySet()) {
+            ArrayList<Object> list = new ArrayList<>();
+            ArrayList optionList = JsonUtils.getValueFromMap(choiceNodeDataMap, key + ".optionList", ArrayList.class);
+            for (int i = 0; i < optionList.size(); i++) {
+                list.add(2);
+            }
+            choices.put(key, list);
+        }
+        //events
+        Map<String, Object> eventDataMap = (Map) Activity.get("eventDataMap");
+        for (String key : eventDataMap.keySet()) {
+            events.put(key, 1);
+        }
+        //treasures
+        Map<String, Object> treasureNodeDataMap = (Map) Activity.get("treasureNodeDataMap");
+        for (String key : treasureNodeDataMap.keySet()) {
+            treasures.put(key, 1);
+        }
+        //stories
+        Map<String, Object> storyNodeDataMap = (Map) Activity.get("storyNodeDataMap");
+        for (String key : storyNodeDataMap.keySet()) {
+            stories.put(key, 1);
+        }
+        //techTrees
+        Map<String, Object> techTreeDataMap = (Map) Activity.get("techTreeDataMap");
+        for (String key : techTreeDataMap.keySet()) {
+            LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+            String defaultBranchId = (String) ((Map) techTreeDataMap.get(key)).get("defaultBranchId");
+            linkedHashMap.put("state", 2);
+            linkedHashMap.put("branch", defaultBranchId);
+            techTrees.put(key, linkedHashMap);
+        }
+        //logs
+        Map<String, Object> archiveItemUnlockDataMap = (Map) Activity.get("archiveItemUnlockDataMap");
+        ArrayList tempLogs = new ArrayList<>();
+        for (String key : archiveItemUnlockDataMap.keySet()) {
+            if (key.contains("log")) {
+                String chapterId = (String) ((Map) archiveItemUnlockDataMap.get(key)).get("chapterId");
+                String itemId = (String) ((Map) archiveItemUnlockDataMap.get(key)).get("itemId");
+                tempLogs.add(MapUtil.of(chapterId, itemId));
+            }
+        }
+        logs = MapUtil.toListMap(tempLogs);
+
+        deepSea.put("places", places);
+        deepSea.put("nodes", nodes);
+        deepSea.put("choices", choices);
+        deepSea.put("events", events);
+        deepSea.put("treasures", treasures);
+        deepSea.put("stories", stories);
+        deepSea.put("techTrees", techTrees);
+        deepSea.put("logs", logs);
+
+        return deepSea;
+    }
+
+    @Override
+    public Map getTower() throws IOException {
+        String loadTower = FileUtils.readFileToString(new File("src/main/resources/data/config/tower.json"), "utf-8");
+        String seasonId = (String) Confing.getTowerConfig().get("season");
+        Map<String, Object> tower = JsonUtils.transferToMap(loadTower);
+        Map season = (Map) tower.get("season");
+        season.put("id", seasonId);
+        return tower;
+    }
+
+    @Override
+    public Map getSiracusaMap() {
+        LinkedHashMap<Object, Object> area = new LinkedHashMap<>();
+        area.put("area_centro", 1);
+        area.put("area_rione", 1);
+        area.put("area_saluzzo", 1);
+        area.put("area_bellone", 1);
+        area.put("area_rossati", 1);
+        area.put("area_teatro", 1);
+        area.put("area_torre", 1);
+        area.put("area_comando", 1);
+        area.put("area_municipio", 1);
+        return Map.of("area", area);
+    }
+
+    @Override
+    public LinkedHashMap getRetro() throws IOException {
+        LinkedHashMap<String, Object> retro = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> block = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> trail = new LinkedHashMap<>();
+        String loadRetro = FileUtils.readFileToString(new File("src/main/resources/data/excel/retro_table.json"), "utf-8");
+        Map<String, Object> retroTable = JsonUtils.transferToMap(loadRetro);
+        //block
+        Map<String, Object> retroActList = (Map) retroTable.get("retroActList");
+        for (String key : retroActList.keySet()) {
+            block.put(key, Map.of("locked", 0, "open", 1));
+        }
+        //trail
+        Map<String, Object> retroTrailList = (Map) retroTable.get("retroTrailList");
+        for (String key : retroTrailList.keySet()) {
+            ArrayList trailRewardList = JsonUtils.getValueFromMap(retroTrailList, key + ".trailRewardList", ArrayList.class);
+            String trailRewardId = (String) ((Map) trailRewardList.get(trailRewardList.size() - 1)).get("trailRewardId");
+            trail.put(key, Map.of(trailRewardId, 1));
+        }
+
+        retro.put("coin", 2);
+        retro.put("supplement", 1);
+        retro.put("block", block);
+        retro.put("trail", trail);
+        retro.put("lst", 0);
+        retro.put("nst", 0);
+        return retro;
+    }
+
 
 }

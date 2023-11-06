@@ -1,10 +1,7 @@
 package com.openarknightsjvav.DAO;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * ClassName: syncDataDAO
@@ -36,5 +33,16 @@ public interface SyncDataDAO {
 
     LinkedHashMap getBackFlow();
 
-    LinkedHashMap getAvatar() throws IOException;
+    ArrayList getAvatarAndBackground() throws IOException;
+
+
+    Map getRlv2() throws IOException;
+
+    LinkedHashMap getDeepSea() throws IOException;
+
+    Map getTower() throws IOException;
+
+    Map getSiracusaMap();
+
+    LinkedHashMap getRetro() throws IOException;
 }
