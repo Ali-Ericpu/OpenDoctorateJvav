@@ -45,4 +45,14 @@ public interface SyncDataDAO {
     Map getSiracusaMap();
 
     LinkedHashMap getRetro() throws IOException;
+
+    HashMap getRoguelike();
+
+    LinkedHashMap getCampaignsV2() throws IOException;
+
+    LinkedHashMap getCheckIn();
+
+    Map getCharm() throws IOException;
+
+    LinkedHashMap getCar() throws IOException;
 }

@@ -754,5 +754,122 @@ public class SyncDataDAOimpl implements SyncDataDAO {
         return retro;
     }
 
+    @Override
+    public HashMap getRoguelike() {
+        HashMap<Object, Object> roguelike = new HashMap<>();
+        roguelike.put("current", null);
+        roguelike.put("stable", null);
+        return roguelike;
+    }
+
+    @Override
+    public LinkedHashMap getCampaignsV2() throws IOException {
+        LinkedHashMap<String, Object> campaignsV2 = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> instances = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> open = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> missions = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> sweepMaxKills = new LinkedHashMap<>();
+        ArrayList<Object> listCamp = new ArrayList<>();
+        String loadStages = FileUtils.readFileToString(new File("src/main/resources/data/excel/stage_table.json"), "utf-8");
+        Map<String, Object> stageTable = JsonUtils.transferToMap(loadStages);
+        Map<String, Object> stages = (Map) stageTable.get("stages");
+        //instances
+        for (String key : stages.keySet()) {
+            if (key.contains("camp")) {
+                LinkedHashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
+                linkedHashMap.put("maxKills", 400);
+                linkedHashMap.put("rewardStatus", List.of(1, 1, 1, 1, 1, 1, 1, 1));
+                instances.put(key, linkedHashMap);
+                listCamp.add(key);
+            }
+        }
+        //open
+        open.put("permanent", listCamp);
+        open.put("rotate", "camp_r_13");
+        open.put("rGroup", "rGroup");
+        open.put("training", listCamp);
+        open.put("tGroup", "group_tr_23");
+        open.put("tAllOpen", "group_tr_all_4");
+        //missions
+        missions.putAll(Map.of("exterminateActivity_1", 2,
+                "exterminateActivity_2", 2,
+                "exterminateActivity_3", 2,
+                "exterminateActivity_4", 2));
+        //sweepMaxKills
+        for (Object o : listCamp) {
+            sweepMaxKills.put((String) o, 400);
+        }
+
+        campaignsV2.put("campaignCurrentFee", 0);
+        campaignsV2.put("campaignTotalFee", 9999);
+        campaignsV2.put("lastRefreshTs", 0);
+        campaignsV2.put("instances", instances);
+        campaignsV2.put("open", open);
+        campaignsV2.put("missions", missions);
+        campaignsV2.put("sweepMaxKills", sweepMaxKills);
+        return campaignsV2;
+    }
+
+    @Override
+    public LinkedHashMap getCheckIn() {
+        LinkedHashMap<Object, Object> checkIn = new LinkedHashMap<>();
+        checkIn.put("canCheckIn", 0);
+        checkIn.put("checkInGroupId", null);
+        checkIn.put("checkInRewardIndex", 0);
+        checkIn.put("checkInHistory", new ArrayList<>());
+
+        return checkIn;
+    }
+
+    @Override
+    public Map getCharm() throws IOException {
+        Map<Object, Object> charm = new HashMap<>();
+        LinkedHashMap<Object, Object> charms = new LinkedHashMap<>();
+        String loadCharm = FileUtils.readFileToString(new File("src/main/resources/data/excel/charm_table.json"), "utf-8");
+        ArrayList charmList =(ArrayList) ((Map) JsonUtils.transferToMap(loadCharm)).get("charmList");
+        for (int i = 0; i < charmList.size(); i++) {
+            String id =(String) ((Map) charmList.get(i)).get("id");
+            charms.put(id, 1);
+        }
+        charm.put("charms", charms);
+
+        return charm;
+    }
+
+    @Override
+    public LinkedHashMap getCar() throws IOException {
+        LinkedHashMap<String, Object> car = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> battleCar = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> exhibitionCar = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> accessories = new LinkedHashMap<>();
+        String loadActivity = FileUtils.readFileToString(new File("src/main/resources/data/excel/activity_table.json"), "utf-8");
+        Map carData =(Map) JsonUtils.transferToMap(loadActivity).get("carData");
+        //battleCar
+        battleCar.put("ROOF", null);
+        battleCar.put("HEADSTOCK", null);
+        battleCar.put("TRUNK_01", null);
+        battleCar.put("TRUNK_02", null);
+        battleCar.put("CAR_OS_01", null);
+        battleCar.put("CAR_OS_02", null);
+        //exhibitionCar
+        exhibitionCar.put("ROOF", null);
+        exhibitionCar.put("HEADSTOCK", null);
+        exhibitionCar.put("TRUNK_01", null);
+        exhibitionCar.put("TRUNK_02", null);
+        exhibitionCar.put("CAR_OS_01", null);
+        exhibitionCar.put("CAR_OS_02", null);
+        //accessories
+        Map<String,Object> carDict =(Map) carData.get("carDict");
+        for (String key : carDict.keySet()) {
+            int num = ((ArrayList)((Map)carDict.get(key)).get("posList")).size();
+            accessories.put(key, Map.of("id", key, "num", num));
+        }
+
+        car.put("battleCar", battleCar);
+        car.put("exhibitionCar", exhibitionCar);
+        car.put("accessories", accessories);
+        return car;
+    }
+
 
 }

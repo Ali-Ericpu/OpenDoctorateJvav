@@ -1,6 +1,5 @@
 package com.openarknightsjvav.service.impl;
 
-import cn.hutool.db.ActiveEntity;
 import com.openarknightsjvav.DAO.impl.SyncDataDAOimpl;
 import com.openarknightsjvav.service.SyncDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class SyncDataServiceImpl implements SyncDataService {
         syncData.put("dexNav", syncDataDAOimpl.getDexNav());
 
         //crisis
-        syncData.put("crisis", Map.of("lst", 1699178812, "nst", 1699182412));
+        syncData.put("crisis", Map.of("lst", 1699178812, "nst", 1699364460));
 
         //backflow
         syncData.put("backflow", syncDataDAOimpl.getBackFlow());
@@ -114,7 +113,41 @@ public class SyncDataServiceImpl implements SyncDataService {
         //retro
         syncData.put("retro", syncDataDAOimpl.getRetro());
 
+        //roguelike
+        syncData.put("roguelike", syncDataDAOimpl.getRoguelike());
 
+        //carousel
+        syncData.put("carousel", new HashMap<>());
+
+        //event
+        syncData.put("event", Map.of("building", 0, "status", 0));
+
+        //collectionReward
+        syncData.put("collectionReward", new HashMap<>());
+
+        //campaignsV2
+        syncData.put("campaignsV2", syncDataDAOimpl.getCampaignsV2());
+
+        //inventory
+        syncData.put("inventory", new HashMap<>());
+
+        //recruit
+        syncData.put("recruit", new HashMap<>());
+
+        //consumable
+        syncData.put("consumable", new HashMap<>());
+
+        //checkIn
+        syncData.put("checkIn", syncDataDAOimpl.getCheckIn());
+
+        //charm
+        syncData.put("charm", syncDataDAOimpl.getCharm());
+
+        //ticket
+        syncData.put("ticket", new HashMap<>());
+
+        //car
+        syncData.put("car", syncDataDAOimpl.getCar());
 
         return syncData;
     }
