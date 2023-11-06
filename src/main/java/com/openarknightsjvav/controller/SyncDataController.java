@@ -33,8 +33,4 @@ public class SyncDataController {
         return Result.sendSyncData(syncData);
     }
 
-    @GetMapping("/test")
-    public Result test(){
-        return Result.sendSyncData(new LinkedHashMap());
-    }
 }
