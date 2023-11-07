@@ -111,7 +111,7 @@ public class ProdDAO {
             return new File("src/main/resources/data/asset/hot_update_list.json");
         }else {
             String downloadFilePath = "src/main/resources/data/asset" + assetsHash;
-            JsonUtils.writeByteFileFromUrlToLocal(url,downloadFilePath);
+            JsonUtils.writeByteFileFromUrlToLocal(url, downloadFilePath);
             return new File(downloadFilePath + "/" + fileName);
         }
 
