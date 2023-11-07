@@ -2,10 +2,15 @@ package com.openarknightsjvav.controller;
 
 import com.openarknightsjvav.result.Result;
 import com.openarknightsjvav.service.ProdService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -63,7 +68,14 @@ public class ProdController {
     }
 
     @GetMapping ("/assetbundle/official/Android/assets/{assetsHash}/{fileName}")
-    public File asset(@PathVariable String assetsHash,@PathVariable String fileName) throws IOException {
+    public ResponseEntity<InputStreamResource> asset(@PathVariable String assetsHash,@PathVariable String fileName) throws IOException {
         return prodService.getAsset(assetsHash, fileName);
     }
+//    @GetMapping("/download")
+//    public ResponseEntity<InputStreamResource> downloadFile() throws IOException {
+//
+//    }
+
+
+
 }

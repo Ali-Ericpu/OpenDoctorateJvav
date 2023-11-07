@@ -1,6 +1,7 @@
 package com.openarknightsjvav.utils;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,8 @@ import java.util.Map;
 public class Confing {
 
     public static Map getConfig() throws IOException {
-        String loadConfig = FileUtils.readFileToString(new File("src/main/resources/data/config/config.json"), "utf-8");
+        File readConfig = new File (ResourceUtils.getURL("classpath:static/data/config/config.json").getPath());
+        String loadConfig = FileUtils.readFileToString(readConfig, "utf-8");
         Map<String, Object> mapConfig = JsonUtils.transferToMap(loadConfig);
         return mapConfig;
     }
@@ -34,14 +36,6 @@ public class Confing {
 
     public static Map getTowerConfig() throws IOException {
         return (Map) getConfig().get("towerConfig");
-    }
-
-    public static Map getNetworkConfig() throws IOException {
-        return (Map) getConfig().get("networkConfig");
-    }
-
-    public static Map getServerConfig() throws IOException {
-        return (Map) getConfig().get("serverConfig");
     }
 
 }

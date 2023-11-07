@@ -3,10 +3,18 @@ package com.openarknightsjvav.DAO;
 import com.openarknightsjvav.utils.Confing;
 import com.openarknightsjvav.utils.JsonUtils;
 import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,8 +95,9 @@ public class ProdDAO {
     }
 
     public Map getNotice() throws IOException {
-        String Preannouncement = FileUtils.readFileToString(new File("src/main/resources/data/config/Preannouncement.json"), "utf-8");
-        return JsonUtils.transferToMap(Preannouncement);
+        File readfile = new File (ResourceUtils.getURL("classpath:static/data/config/Preannouncement.json").getPath());
+        String preannouncement = FileUtils.readFileToString(readfile, "utf-8");
+        return JsonUtils.transferToMap(preannouncement);
     }
 
     public Map getBasic() {
@@ -99,20 +108,54 @@ public class ProdDAO {
                 "identityName", "doctorate",
                 "isMinor", false,
                 "isLatestUserAgreement", true);
+
     }
 
 
-    public File getAsset(String assetsHash, String fileName) throws IOException {
+    public ResponseEntity<InputStreamResource> getAsset(String assetsHash, String fileName) throws IOException {
 
-        String url = "https://ak.hycdn.cn/assetbundle/official/Android/assets/" + assetsHash + "/" + fileName;
+        String assetUrl = "https://ak.hycdn.cn/assetbundle/official/Android/assets/" + assetsHash + "/" + fileName;
         if (fileName.equals("hot_update_list.json")){
-            FileUtils.writeStringToFile(new File("src/main/resources/data/asset/hot_update_list.json"),
-                    JsonUtils.fromUrl(url), "utf-8");
-            return new File("src/main/resources/data/asset/hot_update_list.json");
+            FileUtils.writeStringToFile(new File("src/main/resources/static/data/asset/hot_update_list.json"),
+                    JsonUtils.fromUrl(assetUrl), "utf-8");
+            String downloadFilePath = "src/main/resources/static/data/asset/";
+            File sendFile = new File(downloadFilePath + fileName);
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(sendFile));
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + sendFile.getName())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .contentLength(sendFile.length())
+                    .body(resource);
+//            return JsonUtils.fromUrl(assetUrl);
         }else {
-            String downloadFilePath = "src/main/resources/data/asset" + assetsHash;
-            JsonUtils.writeByteFileFromUrlToLocal(url, downloadFilePath);
-            return new File(downloadFilePath + "/" + fileName);
+            String downloadFilePath = "src/main/resources/static/data/asset/" + assetsHash + "/";
+            boolean mkdir = new File(downloadFilePath).mkdir();
+            System.out.println(mkdir);
+//            JsonUtils.writeByteFileFromUrlToLocal(assetUrl, downloadFilePath + fileName);
+            URL url = new URL(assetUrl);
+            URLConnection conn = url.openConnection();
+            InputStream inputStream = conn.getInputStream();
+            FileOutputStream fileOutputStream = new FileOutputStream( downloadFilePath + fileName);
+
+            int bytesum = 0;
+            int byteread;
+            byte[] buffer = new byte[1024];
+            while ((byteread = inputStream.read(buffer)) != -1) {
+                bytesum += byteread;
+//                System.out.println(bytesum);
+                fileOutputStream.write(buffer, 0, byteread);
+            }
+            fileOutputStream.close();
+            File sendFile = new File(downloadFilePath + fileName);
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(sendFile));
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + sendFile.getName())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .contentLength(sendFile.length())
+                    .body(resource);
+
         }
 
     }

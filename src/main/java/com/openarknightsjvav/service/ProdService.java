@@ -2,6 +2,8 @@ package com.openarknightsjvav.service;
 
 import com.openarknightsjvav.DAO.ProdDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -53,7 +55,7 @@ public class ProdService {
         return prodDAO.getBasic();
     }
 
-    public File getAsset(String assetsHash, String fileName) throws IOException {
+    public ResponseEntity<InputStreamResource> getAsset(String assetsHash, String fileName) throws IOException {
 
         return prodDAO.getAsset(assetsHash,fileName);
     }

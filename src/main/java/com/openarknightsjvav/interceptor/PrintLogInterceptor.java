@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.BufferedReader;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * ClassName: PrintLogInterceptor
@@ -29,8 +31,10 @@ public class PrintLogInterceptor implements HandlerInterceptor {
         while (null != (line = reader.readLine())) {
             data.append(line);
         }
+        LocalTime time = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         String payload = data.toString();
-        System.out.println("method:" + method + "  requestURI:  " + requestURI + "  payload: " + payload);
+        System.out.println( time.format(formatter) + "  method:" + method + "  requestURI:  " + requestURI + "  payload: " + payload);
         return true;
     }
 
