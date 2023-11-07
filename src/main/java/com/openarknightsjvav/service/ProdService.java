@@ -4,8 +4,11 @@ import com.openarknightsjvav.DAO.ProdDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -48,5 +51,10 @@ public class ProdService {
 
     public Map getBasic() {
         return prodDAO.getBasic();
+    }
+
+    public File getAsset(String assetsHash, String fileName) throws IOException {
+
+        return prodDAO.getAsset(assetsHash,fileName);
     }
 }

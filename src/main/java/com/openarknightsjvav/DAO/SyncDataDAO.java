@@ -102,7 +102,7 @@ public class SyncDataDAO {
         status.put("exp", 0);
         status.put("socialPoint", 6);
         status.put("gachaTickt", 0);
-        status.put("tenGachaTicket", 0);
+        status.put("tenGachaTicket", 1);
         status.put("instantFinishTicket", 0);
         status.put("hggShard", 0);
         status.put("lggShard", 0);

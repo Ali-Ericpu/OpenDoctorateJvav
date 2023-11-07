@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
  * @Version 1.0
  */
 @RestController
-@Slf4j
 public class SyncDataController {
 
     @Autowired
@@ -27,7 +26,6 @@ public class SyncDataController {
 
     @PostMapping("/account/syncData")
     public LinkedHashMap getSyncData() throws IOException {
-        log.info("------SyncData------");
         LinkedHashMap syncData = syncDataService.getSyncData();
         return syncData;
     }

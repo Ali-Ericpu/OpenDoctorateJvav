@@ -100,4 +100,20 @@ public class ProdDAO {
                 "isMinor", false,
                 "isLatestUserAgreement", true);
     }
+
+
+    public File getAsset(String assetsHash, String fileName) throws IOException {
+
+        String url = "https://ak.hycdn.cn/assetbundle/official/Android/assets/" + assetsHash + "/" + fileName;
+        if (fileName.equals("hot_update_list.json")){
+            FileUtils.writeStringToFile(new File("src/main/resources/data/asset/hot_update_list.json"),
+                    JsonUtils.fromUrl(url), "utf-8");
+            return new File("src/main/resources/data/asset/hot_update_list.json");
+        }else {
+            String downloadFilePath = "src/main/resources/data/asset" + assetsHash;
+            JsonUtils.writeByteFileFromUrlToLocal(url,downloadFilePath);
+            return new File(downloadFilePath + "/" + fileName);
+        }
+
+    }
 }
