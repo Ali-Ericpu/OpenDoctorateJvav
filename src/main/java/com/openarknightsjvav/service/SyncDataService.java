@@ -40,6 +40,7 @@ public class SyncDataService {
 //            return (LinkedHashMap) JsonUtils.transferToMap(loadSynvData);
 //        }
 
+        LinkedHashMap<Object, Object> result = new LinkedHashMap<>();
         LinkedHashMap syncData = new LinkedHashMap();
 
         //dungoen
@@ -163,6 +164,11 @@ public class SyncDataService {
 
         FileUtils.writeStringToFile(new File("src/main/resources/syncData.json"), gson.toJson(syncData), "utf-8");
 
-        return syncData;
+        result.put("playerDataDelta", Map.of("modified", new HashMap<>(), "deleted", new HashMap<>()));
+        result.put("result", 0);
+        result.put("ts", System.currentTimeMillis() / 1000);
+        result.put("user", syncData);
+
+        return result;
     }
 }

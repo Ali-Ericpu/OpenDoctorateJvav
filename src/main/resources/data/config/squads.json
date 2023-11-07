@@ -4,62 +4,62 @@
         "name": "Squad 1",
         "slots": [
             {
-                "charId": "char_479_sleach",
+                "charInstId": 479,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_sleach"
             },
             {
-                "charId": "char_293_thorns",
+                "charInstId": 293,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_4064_mlynar",
+                "charInstId": 4064,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_264_f12yin",
+                "charInstId": 264,
                 "skillIndex": 1,
                 "currentEquip": null
             },
             {
-                "charId": "char_350_surtr",
+                "charInstId": 350,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_1013_chen2",
+                "charInstId": 1013,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_003_kalts",
+                "charInstId": 3,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_003_kalts"
             },
             {
-                "charId": "char_179_cgbird",
+                "charInstId": 179,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_cgbird"
             },
             {
-                "charId": "char_358_lisa",
+                "charInstId": 358,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_lisa"
             },
             {
-                "charId": "char_1028_texas2",
+                "charInstId": 1028,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_texas2"
             },
             {
-                "charId": "char_1026_gvial2",
+                "charInstId": 1026,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_gvial2"
             },
             {
-                "charId": "char_1014_nearl2",
+                "charInstId": 1014,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_nearl2"
             }
@@ -70,62 +70,62 @@
         "name": "Squad 2",
         "slots": [
             {
-                "charId": "char_479_sleach",
+                "charInstId": 479,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_sleach"
             },
             {
-                "charId": "char_293_thorns",
+                "charInstId": 293,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_4064_mlynar",
+                "charInstId": 4064,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_264_f12yin",
+                "charInstId": 264,
                 "skillIndex": 1,
                 "currentEquip": null
             },
             {
-                "charId": "char_350_surtr",
+                "charInstId": 350,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_1013_chen2",
+                "charInstId": 1013,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_003_kalts",
+                "charInstId": 3,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_003_kalts"
             },
             {
-                "charId": "char_179_cgbird",
+                "charInstId": 179,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_cgbird"
             },
             {
-                "charId": "char_358_lisa",
+                "charInstId": 358,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_lisa"
             },
             {
-                "charId": "char_1028_texas2",
+                "charInstId": 1028,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_texas2"
             },
             {
-                "charId": "char_311_mudrok",
+                "charInstId": 311,
                 "skillIndex": 1,
                 "currentEquip": null
             },
             {
-                "charId": "char_202_demkni",
+                "charInstId": 202,
                 "skillIndex": 0,
                 "currentEquip": "uniequip_003_demkni"
             }
@@ -136,62 +136,62 @@
         "name": "Squad 3",
         "slots": [
             {
-                "charId": "char_479_sleach",
+                "charInstId": 479,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_sleach"
             },
             {
-                "charId": "char_293_thorns",
+                "charInstId": 293,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_4064_mlynar",
+                "charInstId": 4064,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_264_f12yin",
+                "charInstId": 264,
                 "skillIndex": 1,
                 "currentEquip": null
             },
             {
-                "charId": "char_350_surtr",
+                "charInstId": 350,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_1013_chen2",
+                "charInstId": 1013,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_003_kalts",
+                "charInstId": 3,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_003_kalts"
             },
             {
-                "charId": "char_179_cgbird",
+                "charInstId": 179,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_cgbird"
             },
             {
-                "charId": "char_1012_skadi2",
+                "charInstId": 1012,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_1028_texas2",
+                "charInstId": 1028,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_texas2"
             },
             {
-                "charId": "char_4055_bgsnow",
+                "charInstId": 4055,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_bgsnow"
             },
             {
-                "charId": "char_2012_typhon",
+                "charInstId": 2012,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_typhon"
             }
@@ -202,62 +202,62 @@
         "name": "Squad 4",
         "slots": [
             {
-                "charId": "char_479_sleach",
+                "charInstId": 479,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_sleach"
             },
             {
-                "charId": "char_293_thorns",
+                "charInstId": 293,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_4064_mlynar",
+                "charInstId": 4064,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_264_f12yin",
+                "charInstId": 264,
                 "skillIndex": 1,
                 "currentEquip": null
             },
             {
-                "charId": "char_350_surtr",
+                "charInstId": 350,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_1013_chen2",
+                "charInstId": 1013,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_003_kalts",
+                "charInstId": 3,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_003_kalts"
             },
             {
-                "charId": "char_179_cgbird",
+                "charInstId": 179,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_cgbird"
             },
             {
-                "charId": "char_1012_skadi2",
+                "charInstId": 1012,
                 "skillIndex": 2,
                 "currentEquip": null
             },
             {
-                "charId": "char_1028_texas2",
+                "charInstId": 1028,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_texas2"
             },
             {
-                "charId": "char_180_amgoat",
+                "charInstId": 180,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_amgoat"
             },
             {
-                "charId": "char_134_ifrit",
+                "charInstId": 134,
                 "skillIndex": 2,
                 "currentEquip": "uniequip_002_ifrit"
             }

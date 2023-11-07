@@ -2,44 +2,31 @@ package com.openarknightsjvav.result;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 /**
- * ClassName: syncDataResult
- * Package: com.cryrain.openarknightsjava.result
+ * ClassName: Status
+ * Package: com.openarknightsjvav.result
  * Description:
  *
  * @author Raincc
- * @Create 2023/11/2 19:19
+ * @Create 2023/11/6 21:59
  * @Version 1.0
  */
 @Data
 public class Result {
-    private Integer result;
-    private Long ts;
-    private Object user;
-    private LinkedHashMap playerDataDelta;
-
+    private int status;
+    private String msg;
+    private Object data;
 
     public Result() {
     }
 
-    public Result(Integer result, Long ts, Object user, LinkedHashMap playerDataDelta) {
-        this.result = result;
-        this.ts = ts;
-        this.user = user;
-        this.playerDataDelta = playerDataDelta;
+    public Result(int status, String msg, Object data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
     }
 
-
-    public static Result sendSyncData(Object user) {
-        Long time = System.currentTimeMillis() / 1000;
-        LinkedHashMap linkedHashMap = new LinkedHashMap();
-        linkedHashMap.put("modified", new HashMap());
-        linkedHashMap.put("deleted", new HashMap());
-        return new Result(0, time, user, linkedHashMap);
+    public static Result success(Object data){
+        return new Result(0,"OK", data);
     }
-
-
 }

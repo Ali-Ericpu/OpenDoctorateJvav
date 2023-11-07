@@ -1,6 +1,5 @@
 package com.openarknightsjvav.controller;
 
-import com.openarknightsjvav.result.Result;
 import com.openarknightsjvav.service.SyncDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * ClassName: SyncDataController
@@ -27,10 +26,10 @@ public class SyncDataController {
     private SyncDataService syncDataService;
 
     @PostMapping("/account/syncData")
-    public Result getSyncData() throws IOException {
+    public LinkedHashMap getSyncData() throws IOException {
         log.info("------SyncData------");
-        Map syncData = syncDataService.getSyncData();
-        return Result.sendSyncData(syncData);
+        LinkedHashMap syncData = syncDataService.getSyncData();
+        return syncData;
     }
 
 }

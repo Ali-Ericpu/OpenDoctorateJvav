@@ -1,6 +1,6 @@
 package com.openarknightsjvav.controller;
 
-import com.openarknightsjvav.result.Status;
+import com.openarknightsjvav.result.Result;
 import com.openarknightsjvav.service.ProdService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,16 +46,16 @@ public class ProdController {
     }
 
     @GetMapping("/app/v1/config")
-    public Status getAPPConfig() throws IOException {
+    public Result getAPPConfig() throws IOException {
         log.info("------/app/v1/config------");
         Map Version = prodService.getAPPConfig();
-        return Status.success(Version);
+        return Result.success(Version);
     }
 
     @GetMapping("/general/v1/server_time")
-    public Status getServerTime() {
+    public Result getServerTime() {
         log.info("------/general/v1/server_time------");
-        return Status.success(Map.of("serverTime", System.currentTimeMillis() / 1000,
+        return Result.success(Map.of("serverTime", System.currentTimeMillis() / 1000,
                 "isHoliday", false));
     }
 
@@ -66,8 +66,8 @@ public class ProdController {
     }
 
     @GetMapping("/user/info/v1/basic")
-    public Status getBasic(){
+    public Result getBasic(){
         log.info("------/user/info/v1/basic------");
-        return Status.success(prodService.getBasic());
+        return Result.success(prodService.getBasic());
     }
 }

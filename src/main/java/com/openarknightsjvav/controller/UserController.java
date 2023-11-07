@@ -1,6 +1,6 @@
 package com.openarknightsjvav.controller;
 
-import com.openarknightsjvav.result.Status;
+import com.openarknightsjvav.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +28,9 @@ public class UserController {
 
 
     @PostMapping("/user/oauth2/v2/grant")
-    public Status getGrant(){
+    public Result getGrant(){
         log.info("------/user/oauth2/v2/grant------");
-        return Status.success(Map.of("code", "doctorate", "uid", "1"));//UID
+        return Result.success(Map.of("code", "doctorate", "uid", "1"));//UID
     }
 
     @PostMapping("/u8/user/v1/getToken")

@@ -92,11 +92,14 @@ public class SyncDataDAO {
         LinkedHashMap avatar = new LinkedHashMap();
         avatar.put("type", "ICON");
         avatar.put("id", "avatar_activity_RI");
+        //secretary
+        String secretary =(String) Confing.getUserConfig().get("secretary");
+        String secretarySkinId =(String) Confing.getUserConfig().get("secretarySkinId");
 
         status.put("nickName", "Doctorate");//config
         status.put("nickNumber", "1111");
         status.put("level", 120);
-        status.put("exp", "0");
+        status.put("exp", 0);
         status.put("socialPoint", 6);
         status.put("gachaTickt", 0);
         status.put("tenGachaTicket", 0);
@@ -122,13 +125,13 @@ public class SyncDataDAO {
         status.put("registerTs", timeStamp);
         status.put("lastOnlineTs", timeStamp);
         status.put("serverName", "Doctorate");
-        status.put("avatarId", 0);
+        status.put("avatarId", "0");
         status.put("resume", "DoctorateJvav");
         status.put("friendNumLimit", 999);
         status.put("monthlySubscriptionStartTime", 0);
         status.put("monthlySubscriptionEndTime", 0);
-        status.put("secretary", "char_249_mlyss");          //config
-        status.put("secretarySkinId", "char_249_mlyss#2");  //config
+        status.put("secretary", secretary);
+        status.put("secretarySkinId", secretarySkinId);
         status.put("tipMonthlyCardExpireTs", 0);
         status.put("avatar", avatar);       //config
         status.put("globalVoiceLan", "JP");     //config
@@ -227,6 +230,17 @@ public class SyncDataDAO {
                     list.add(linkedHashMap);
                 }
                 skills.add(list);
+                //Roguelike chars
+            } else if ((listSkills.get(i)).size() == 1 &&
+                    StringUtils.containsAny(listChars.get(i), "char_508_aguard", "char_509_acast", "char_510_amedic", "char_511_asnipe")) {
+                Map map = (Map) (listSkills.get(i).get(0));
+                LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+                linkedHashMap.put("skillId", map.get("skillId"));
+                linkedHashMap.put("unlock", 1);
+                linkedHashMap.put("state", 0);
+                linkedHashMap.put("specializeLevel", charConfig.get("skillsSpecializeLevel"));
+                linkedHashMap.put("completeUpgradeTime", -1);
+                skills.add(i, List.of(linkedHashMap));
                 //E1
             } else if ((listSkills.get(i)).size() == 1) {
                 Map map = (Map) (listSkills.get(i).get(0));
@@ -236,7 +250,7 @@ public class SyncDataDAO {
                 linkedHashMap.put("state", 0);
                 linkedHashMap.put("specializeLevel", 0);
                 linkedHashMap.put("completeUpgradeTime", -1);
-                skills.add(Map.of(i, linkedHashMap));
+                skills.add(i, List.of(linkedHashMap));
                 //E0
             } else if ((listSkills.get(i)).size() == 0) {
                 skills.add(new ArrayList<>());
@@ -416,15 +430,15 @@ public class SyncDataDAO {
                     LinkedHashMap<String, Object> stage = new LinkedHashMap<>();
                     for (int j = 0; j < size; j++) {
                         String s = (String) ((ArrayList) ((HashMap) handbook.get(listChars.get(i))).get("storySetId")).get(j);
-                        story.put(s, Map.of("fts", (int)1649232340,
-                                "rts", (int)1649232340));
+                        story.put(s, Map.of("fts", 1649232340,
+                                "rts", 1649232340));
                     }
                     LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
                     linkedHashMap.put("startTimes", 0);
                     linkedHashMap.put("completeTimes", 1);
                     linkedHashMap.put("state", 3);
-                    linkedHashMap.put("fts", (int)1624284657);
-                    linkedHashMap.put("rts", (int)1624284657);
+                    linkedHashMap.put("fts", 1624284657);
+                    linkedHashMap.put("rts", 1624284657);
                     linkedHashMap.put("startTime", 2);
                     stage.put((String) ((Map) stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
                     LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
@@ -437,8 +451,8 @@ public class SyncDataDAO {
                     linkedHashMap.put("startTimes", 0);
                     linkedHashMap.put("completeTimes", 1);
                     linkedHashMap.put("state", 3);
-                    linkedHashMap.put("fts", (int)1624284657);
-                    linkedHashMap.put("rts", (int)1624284657);
+                    linkedHashMap.put("fts", 1624284657);
+                    linkedHashMap.put("rts", 1624284657);
                     linkedHashMap.put("startTime", 2);
                     stage.put((String) ((Map) stageData.get(listChars.get(i))).get("stageId"), linkedHashMap);
                     LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
@@ -450,8 +464,8 @@ public class SyncDataDAO {
                     LinkedHashMap<String, Object> story = new LinkedHashMap<>();
                     for (int j = 0; j < size; j++) {
                         String s = (String) ((ArrayList) ((Map) handbook.get(listChars.get(i))).get("storySetId")).get(j);
-                        story.put(s, Map.of("fts", (int)1649232340,
-                                "rts", (int)1649232340));
+                        story.put(s, Map.of("fts", 1649232340,
+                                "rts", 1649232340));
                     }
                     LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
                     map.put("story", story);
@@ -483,7 +497,6 @@ public class SyncDataDAO {
 
         return troop;
     }
-
 
     public LinkedHashMap getNpcAudio() {
         LinkedHashMap<Object, Object> npcAudio = new LinkedHashMap<>();
@@ -523,12 +536,10 @@ public class SyncDataDAO {
         return Map.of("characterSkins", characterSkins);
     }
 
-
     public Map getMission() {
         //
         return new HashMap<>();
     }
-
 
     public Map getDexNav() throws IOException {
         String loadChars = FileUtils.readFileToString(new File("src/main/resources/data/excel/character_table.json"), "utf-8");
@@ -554,14 +565,12 @@ public class SyncDataDAO {
         return dexNav;
     }
 
-
     public LinkedHashMap<String, Object> getBackFlow() {
         LinkedHashMap<String, Object> backFlow = new LinkedHashMap<>();
         backFlow.put("open", true);
         backFlow.put("current", null);
         return backFlow;
     }
-
 
     public ArrayList<Map> getAvatarAndBackground() throws IOException {
         ArrayList<Map> getAvatarAndBackground = new ArrayList<>();
@@ -577,9 +586,11 @@ public class SyncDataDAO {
         ArrayList listAvatar = (ArrayList) mapAvatar.get("avatarList");
         for (int i = 0; i < listAvatar.size(); i++) {
             LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+            String avatar =(String) ((Map) listAvatar.get(i)).get("avatarId");
+            String src = (avatar.contains("def") ? "initial" : "other");
             linkedHashMap.put("ts", timeStamp);
-            linkedHashMap.put("src", "other");
-            avatarId.put((String) ((Map) listAvatar.get(i)).get("avatarId"), linkedHashMap);
+            linkedHashMap.put("src", src);
+            avatarId.put(avatar , linkedHashMap);
         }
         //background
         Map<String, Object> mapBackground = (Map) JsonUtils.transferToMap(loadAvatar).get("homeBackgroundData");
@@ -603,7 +614,6 @@ public class SyncDataDAO {
         getAvatarAndBackground.add(homeTheme);
         return getAvatarAndBackground;
     }
-
 
     public Map getRlv2() throws IOException {
         String loadRlv2 = FileUtils.readFileToString(new File("src/main/resources/data/config/rlv2.json"), "utf-8");
@@ -714,7 +724,6 @@ public class SyncDataDAO {
         return Map.of("area", area);
     }
 
-
     public LinkedHashMap getRetro() throws IOException {
         LinkedHashMap<String, Object> retro = new LinkedHashMap<>();
         LinkedHashMap<String, Object> block = new LinkedHashMap<>();
@@ -743,14 +752,12 @@ public class SyncDataDAO {
         return retro;
     }
 
-
     public HashMap getRoguelike() {
         HashMap<Object, Object> roguelike = new HashMap<>();
         roguelike.put("current", null);
         roguelike.put("stable", null);
         return roguelike;
     }
-
 
     public LinkedHashMap getCampaignsV2() throws IOException {
         LinkedHashMap<String, Object> campaignsV2 = new LinkedHashMap<>();
@@ -775,7 +782,7 @@ public class SyncDataDAO {
         //open
         open.put("permanent", listCamp);
         open.put("rotate", "camp_r_13");
-        open.put("rGroup", "rGroup");
+        open.put("rGroup", "group_r_13");
         open.put("training", listCamp);
         open.put("tGroup", "group_tr_23");
         open.put("tAllOpen", "group_tr_all_4");
@@ -799,7 +806,6 @@ public class SyncDataDAO {
         return campaignsV2;
     }
 
-
     public LinkedHashMap getCheckIn() {
         LinkedHashMap<Object, Object> checkIn = new LinkedHashMap<>();
         checkIn.put("canCheckIn", 0);
@@ -809,7 +815,6 @@ public class SyncDataDAO {
 
         return checkIn;
     }
-
 
     public Map getCharm() throws IOException {
         Map<Object, Object> charm = new HashMap<>();
@@ -825,7 +830,6 @@ public class SyncDataDAO {
 
         return charm;
     }
-
 
     public LinkedHashMap getCar() throws IOException {
         LinkedHashMap<String, Object> car = new LinkedHashMap<>();
@@ -860,6 +864,5 @@ public class SyncDataDAO {
         car.put("accessories", accessories);
         return car;
     }
-
 
 }
