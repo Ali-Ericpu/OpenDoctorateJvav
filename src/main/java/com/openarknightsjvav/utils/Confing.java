@@ -19,8 +19,8 @@ import java.util.Map;
 public class Confing {
 
     public static Map getConfig() throws IOException {
-        File readConfig = new File (ResourceUtils.getURL("classpath:static/data/config/config.json").getPath());
-        String loadConfig = FileUtils.readFileToString(readConfig, "utf-8");
+//        File readConfig = new File (ResourceUtils.getURL("classpath:static/data/config/config.json").getPath());
+        String loadConfig = FileUtils.readFileToString(new File("data/config/config.json"), "utf-8");
         Map<String, Object> mapConfig = JsonUtils.transferToMap(loadConfig);
         return mapConfig;
     }

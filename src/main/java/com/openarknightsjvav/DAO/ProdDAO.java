@@ -95,8 +95,9 @@ public class ProdDAO {
     }
 
     public Map getNotice() throws IOException {
-        File readfile = new File (ResourceUtils.getURL("classpath:static/data/config/Preannouncement.json").getPath());
-        String preannouncement = FileUtils.readFileToString(readfile, "utf-8");
+//        File readfile = new File (ResourceUtils.getURL("classpath:static/data/config/Preannouncement.json").getPath());
+//        String preannouncement = FileUtils.readFileToString(readfile, "utf-8");
+        String preannouncement = FileUtils.readFileToString(new File("data/config/Preannouncement.json"), "utf-8");
         return JsonUtils.transferToMap(preannouncement);
     }
 
@@ -116,9 +117,9 @@ public class ProdDAO {
 
         String assetUrl = "https://ak.hycdn.cn/assetbundle/official/Android/assets/" + assetsHash + "/" + fileName;
         if (fileName.equals("hot_update_list.json")){
-            FileUtils.writeStringToFile(new File("src/main/resources/static/data/asset/hot_update_list.json"),
+            FileUtils.writeStringToFile(new File("data/asset/hot_update_list.json"),
                     JsonUtils.fromUrl(assetUrl), "utf-8");
-            String downloadFilePath = "src/main/resources/static/data/asset/";
+            String downloadFilePath = "data/asset/";
             File sendFile = new File(downloadFilePath + fileName);
             InputStreamResource resource = new InputStreamResource(new FileInputStream(sendFile));
 
@@ -129,7 +130,7 @@ public class ProdDAO {
                     .body(resource);
 //            return JsonUtils.fromUrl(assetUrl);
         }else {
-            String downloadFilePath = "src/main/resources/static/data/asset/" + assetsHash + "/";
+            String downloadFilePath = "data/asset/" + assetsHash + "/";
             boolean mkdir = new File(downloadFilePath).mkdir();
             System.out.println(mkdir);
 //            JsonUtils.writeByteFileFromUrlToLocal(assetUrl, downloadFilePath + fileName);

@@ -71,11 +71,4 @@ public class ProdController {
     public ResponseEntity<InputStreamResource> asset(@PathVariable String assetsHash,@PathVariable String fileName) throws IOException {
         return prodService.getAsset(assetsHash, fileName);
     }
-//    @GetMapping("/download")
-//    public ResponseEntity<InputStreamResource> downloadFile() throws IOException {
-//
-//    }
-
-
-
 }

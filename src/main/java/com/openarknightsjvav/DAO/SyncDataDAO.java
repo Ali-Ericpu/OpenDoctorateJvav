@@ -30,8 +30,8 @@ public class SyncDataDAO {
 
         LinkedHashMap dungeon = new LinkedHashMap();
         ArrayList listCowLevel = new ArrayList();
-        File readStage = new File (ResourceUtils.getURL("classpath:static/data/excel/stage_table.json").getPath());
-        String stage = FileUtils.readFileToString(readStage, "utf-8");
+//        File readStage = new File (ResourceUtils.getURL("classpath:static/data/excel/stage_table.json").getPath());
+        String stage = FileUtils.readFileToString(new File("data/excel/stage_table.json"), "utf-8");
         Map<String, Object> map = JsonUtils.transferToMap(stage);
         Map stagesKey = (Map) map.get("stages");
         ArrayList listStages = new ArrayList();
@@ -82,10 +82,10 @@ public class SyncDataDAO {
     public LinkedHashMap getStatus() throws IOException {
         LinkedHashMap<String, Object> status = new LinkedHashMap();
         LinkedHashMap flags = new LinkedHashMap();
-        File readFlags = new File (ResourceUtils.getURL("classpath:static/data/excel/stage_table.json").getPath());
+//        File readFlags = new File (ResourceUtils.getURL("classpath:static/data/excel/stage_table.json").getPath());
         //flags
         flags.put("init", 1);
-        String s = FileUtils.readFileToString(readFlags, "utf-8");
+        String s = FileUtils.readFileToString(new File("data/excel/stage_table.json"), "utf-8");
         Map<String, Object> flagsMap = JsonUtils.transferToMap(s);
         Set<String> keySet = flagsMap.keySet();
         for (String key : keySet) {
@@ -144,15 +144,20 @@ public class SyncDataDAO {
 
     public LinkedHashMap getTroop() throws IOException {
         LinkedHashMap troop = new LinkedHashMap();
-        File readChars = new File (ResourceUtils.getURL("classpath:static/data/excel/character_table.json").getPath());
-        File readSkins = new File (ResourceUtils.getURL("classpath:static/data/excel/skin_table.json").getPath());
-        File readEquip = new File (ResourceUtils.getURL("classpath:static/data/excel/uniequip_table.json").getPath());
-        File readAddon = new File (ResourceUtils.getURL("classpath:static/data/excel/handbook_info_table.json").getPath());
-        File readSquads = new File (ResourceUtils.getURL("classpath:static/data/config/squads.json").getPath());
-        String loadChars = FileUtils.readFileToString(readChars, "utf-8");
-        String loadSkins = FileUtils.readFileToString(readSkins, "utf-8");
-        String loadEquip = FileUtils.readFileToString(readEquip, "utf-8");
-        String loadAddon = FileUtils.readFileToString(readAddon, "utf-8");
+//        File readChars = new File (ResourceUtils.getURL("classpath:static/data/excel/character_table.json").getPath());
+//        File readSkins = new File (ResourceUtils.getURL("classpath:static/data/excel/skin_table.json").getPath());
+//        File readEquip = new File (ResourceUtils.getURL("classpath:static/data/excel/uniequip_table.json").getPath());
+//        File readAddon = new File (ResourceUtils.getURL("classpath:static/data/excel/handbook_info_table.json").getPath());
+//        File readSquads = new File (ResourceUtils.getURL("classpath:static/data/config/squads.json").getPath());
+//        String loadChars = FileUtils.readFileToString(readChars, "utf-8");
+//        String loadSkins = FileUtils.readFileToString(readSkins, "utf-8");
+//        String loadEquip = FileUtils.readFileToString(readEquip, "utf-8");
+//        String loadAddon = FileUtils.readFileToString(readAddon, "utf-8");
+        String loadChars = FileUtils.readFileToString(new File("data/excel/character_table.json"), "utf-8");
+        String loadSkins = FileUtils.readFileToString(new File("data/excel/skin_table.json"), "utf-8");
+        String loadEquip = FileUtils.readFileToString(new File("data/excel/uniequip_table.json"), "utf-8");
+        String loadAddon = FileUtils.readFileToString(new File("data/excel/handbook_info_table.json"), "utf-8");
+        String loadSquads = FileUtils.readFileToString(new File("data/config/squads.json"), "utf-8");
 
         //chars
         Integer maxInstId = 0;        //curCharInstId
@@ -400,7 +405,6 @@ public class SyncDataDAO {
             charGroup.put(listChars.get(i), Map.of("favorPoint", 25570));
         }
         //squads
-        String loadSquads = FileUtils.readFileToString(readSquads, "utf-8");
         Map<String, Object> squadsMap = JsonUtils.transferToMap(loadSquads);
         //addon
         Map<String, Object> mapAddon = JsonUtils.transferToMap(loadAddon);
@@ -519,8 +523,8 @@ public class SyncDataDAO {
     }
 
     public LinkedHashMap getPushFlags() throws IOException {
-        File readMail = new File (ResourceUtils.getURL("classpath:static/data/config/mails.json").getPath());
-        String loadMail = FileUtils.readFileToString(readMail, "utf-8");
+//        File readMail = new File (ResourceUtils.getURL("classpath:static/data/config/mails.json").getPath());
+        String loadMail = FileUtils.readFileToString(new File("data/config/mails.json"), "utf-8");
         LinkedHashMap<String, Object> pushFlags = new LinkedHashMap<>();
         Map<String, Object> mail = JsonUtils.transferToMap(loadMail);
         pushFlags.put("hasGifts", ((Map) mail.get("mailList")).size());
@@ -534,8 +538,8 @@ public class SyncDataDAO {
 
     public Map getSkin() throws IOException {
         LinkedHashMap<String, Object> characterSkins = new LinkedHashMap<>();
-        File readSkin = new File (ResourceUtils.getURL("classpath:static/data/excel/skin_table.json").getPath());
-        String loadSkin = FileUtils.readFileToString(readSkin, "utf-8");
+//        File readSkin = new File (ResourceUtils.getURL("classpath:static/data/excel/skin_table.json").getPath());
+        String loadSkin = FileUtils.readFileToString(new File("data/excel/skin_table.json"), "utf-8");
         Map<String, Object> skins = (Map) JsonUtils.transferToMap(loadSkin).get("charSkins");
         for (String key : skins.keySet()) {
             String skinId = (String) ((Map) skins.get(key)).get("skinId");
@@ -553,8 +557,8 @@ public class SyncDataDAO {
     }
 
     public Map getDexNav() throws IOException {
-        File readChars = new File (ResourceUtils.getURL("classpath:static/data/excel/skin_table.json").getPath());
-        String loadChars = FileUtils.readFileToString(readChars, "utf-8");
+//        File readChars = new File (ResourceUtils.getURL("classpath:static/data/excel/skin_table.json").getPath());
+        String loadChars = FileUtils.readFileToString(new File("data/excel/skin_table.json"), "utf-8");
         LinkedHashMap<String, Object> character = new LinkedHashMap<>();
         LinkedHashMap<String, Object> dexNav = new LinkedHashMap<>();
         Map<String, Object> chars = JsonUtils.transferToMap(loadChars);
@@ -592,9 +596,9 @@ public class SyncDataDAO {
         LinkedHashMap<Object, Object> background = new LinkedHashMap<>();
         LinkedHashMap<Object, Object> themes = new LinkedHashMap<>();
         LinkedHashMap<Object, Object> homeTheme = new LinkedHashMap<>();
-        File readAvatar = new File (ResourceUtils.getURL("classpath:static/data/excel/display_meta_table.json").getPath());
+//        File readAvatar = new File (ResourceUtils.getURL("classpath:static/data/excel/display_meta_table.json").getPath());
         //avatar
-        String loadAvatar = FileUtils.readFileToString(readAvatar, "utf-8");
+        String loadAvatar = FileUtils.readFileToString(new File("data/excel/display_meta_table.json"), "utf-8");
         Map<String, Object> mapAvatar = (Map) JsonUtils.transferToMap(loadAvatar).get("playerAvatarData");
         ArrayList listAvatar = (ArrayList) mapAvatar.get("avatarList");
         for (int i = 0; i < listAvatar.size(); i++) {
@@ -629,8 +633,8 @@ public class SyncDataDAO {
     }
 
     public Map getRlv2() throws IOException {
-        File readRlv2 = new File (ResourceUtils.getURL("classpath:static/data/config/rlv2.json").getPath());
-        String loadRlv2 = FileUtils.readFileToString(readRlv2, "utf-8");
+//        File readRlv2 = new File (ResourceUtils.getURL("classpath:static/data/config/rlv2.json").getPath());
+        String loadRlv2 = FileUtils.readFileToString(new File("data/config/rlv2.json"), "utf-8");
         return JsonUtils.transferToMap(loadRlv2);
     }
 
@@ -644,8 +648,8 @@ public class SyncDataDAO {
         LinkedHashMap<String, Object> stories = new LinkedHashMap<>();
         LinkedHashMap<String, Object> techTrees = new LinkedHashMap<>();
         Map<String, Object> logs = new HashMap<>();
-        File readActivity = new File (ResourceUtils.getURL("classpath:static/data/excel/activity_table.json").getPath());
-        String loadActivity = FileUtils.readFileToString(readActivity, "utf-8");
+//        File readActivity = new File (ResourceUtils.getURL("classpath:static/data/excel/activity_table.json").getPath());
+        String loadActivity = FileUtils.readFileToString(new File("data/excel/activity_table.json"), "utf-8");
         //ognl
         Map Activity = JsonUtils.getValue(loadActivity, "activity.TYPE_ACT17SIDE.act17side", Map.class);
         //places
@@ -717,8 +721,8 @@ public class SyncDataDAO {
     }
 
     public Map getTower() throws IOException {
-        File readTower = new File (ResourceUtils.getURL("classpath:static/data/config/tower.json").getPath());
-        String loadTower = FileUtils.readFileToString(readTower, "utf-8");
+//        File readTower = new File (ResourceUtils.getURL("classpath:static/data/config/tower.json").getPath());
+        String loadTower = FileUtils.readFileToString(new File("data/config/tower.json"), "utf-8");
         String seasonId = (String) Confing.getTowerConfig().get("season");
         Map<String, Object> tower = JsonUtils.transferToMap(loadTower);
         Map season = (Map) tower.get("season");
@@ -744,8 +748,8 @@ public class SyncDataDAO {
         LinkedHashMap<String, Object> retro = new LinkedHashMap<>();
         LinkedHashMap<String, Object> block = new LinkedHashMap<>();
         LinkedHashMap<String, Object> trail = new LinkedHashMap<>();
-        File readRetro = new File (ResourceUtils.getURL("classpath:static/data/excel/retro_table.json").getPath());
-        String loadRetro = FileUtils.readFileToString(readRetro, "utf-8");
+//        File readRetro = new File (ResourceUtils.getURL("classpath:static/data/excel/retro_table.json").getPath());
+        String loadRetro = FileUtils.readFileToString(new File("data/excel/retro_table.json"), "utf-8");
         Map<String, Object> retroTable = JsonUtils.transferToMap(loadRetro);
         //block
         Map<String, Object> retroActList = (Map) retroTable.get("retroActList");
@@ -783,8 +787,8 @@ public class SyncDataDAO {
         LinkedHashMap<String, Object> missions = new LinkedHashMap<>();
         LinkedHashMap<String, Object> sweepMaxKills = new LinkedHashMap<>();
         ArrayList<Object> listCamp = new ArrayList<>();
-        File readStages = new File (ResourceUtils.getURL("classpath:static/data/excel/stage_table.json").getPath());
-        String loadStages = FileUtils.readFileToString(readStages, "utf-8");
+//        File readStages = new File (ResourceUtils.getURL("classpath:static/data/excel/stage_table.json").getPath());
+        String loadStages = FileUtils.readFileToString(new File("data/excel/stage_table.json"), "utf-8");
         Map<String, Object> stageTable = JsonUtils.transferToMap(loadStages);
         Map<String, Object> stages = (Map) stageTable.get("stages");
         //instances
@@ -837,8 +841,8 @@ public class SyncDataDAO {
     public Map getCharm() throws IOException {
         Map<Object, Object> charm = new HashMap<>();
         LinkedHashMap<Object, Object> charms = new LinkedHashMap<>();
-        File readCharm = new File (ResourceUtils.getURL("classpath:static/data/excel/charm_table.json").getPath());
-        String loadCharm = FileUtils.readFileToString(readCharm, "utf-8");
+//        File readCharm = new File (ResourceUtils.getURL("classpath:static/data/excel/charm_table.json").getPath());
+        String loadCharm = FileUtils.readFileToString(new File("data/excel/charm_table.json"), "utf-8");
         ArrayList charmList = (ArrayList) ((Map) JsonUtils.transferToMap(loadCharm)).get("charmList");
         for (int i = 0; i < charmList.size(); i++) {
             String id = (String) ((Map) charmList.get(i)).get("id");
@@ -855,8 +859,8 @@ public class SyncDataDAO {
         LinkedHashMap<String, Object> battleCar = new LinkedHashMap<>();
         LinkedHashMap<String, Object> exhibitionCar = new LinkedHashMap<>();
         LinkedHashMap<String, Object> accessories = new LinkedHashMap<>();
-        File readActivity = new File (ResourceUtils.getURL("classpath:static/data/excel/activity_table.json").getPath());
-        String loadActivity = FileUtils.readFileToString(readActivity, "utf-8");
+//        File readActivity = new File (ResourceUtils.getURL("classpath:static/data/excel/activity_table.json").getPath());
+        String loadActivity = FileUtils.readFileToString(new File("data/excel/activity_table.json"), "utf-8");
         Map carData = (Map) JsonUtils.transferToMap(loadActivity).get("carData");
         //battleCar
         battleCar.put("ROOF", null);
