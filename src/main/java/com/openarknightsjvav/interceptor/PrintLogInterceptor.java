@@ -24,17 +24,18 @@ public class PrintLogInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
-        StringBuffer data = new StringBuffer();
-        String line = null;
-        BufferedReader reader = null;
-        reader = request.getReader();
-        while (null != (line = reader.readLine())) {
-            data.append(line);
-        }
+//        StringBuffer data = new StringBuffer();
+//        String line = null;
+//        BufferedReader reader = null;
+//        reader = request.getReader();
+//        while (null != (line = reader.readLine())) {
+//            data.append(line);
+//        }
         LocalTime time = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String payload = data.toString();
-        System.out.println( time.format(formatter) + "  method:" + method + "  requestURI:  " + requestURI + "  payload: " + payload);
+//        String payload = data.toString();
+//        System.out.println( time.format(formatter) + "  method:" + method + "  requestURI:  " + requestURI + "  payload: " + payload);
+        System.out.println( time.format(formatter) + "  method:" + method + "  requestURL:" + requestURI);
         return true;
     }
 

@@ -20,9 +20,6 @@ import java.util.*;
 @RestController
 public class UserController {
 
-    @Autowired
-
-
     @PostMapping("/user/oauth2/v2/grant")
     public Result getGrant(){
         return Result.success(Map.of("code", "doctorate", "uid", "1"));//UID

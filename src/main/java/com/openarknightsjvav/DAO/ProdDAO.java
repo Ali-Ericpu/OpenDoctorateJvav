@@ -117,6 +117,7 @@ public class ProdDAO {
 
         String assetUrl = "https://ak.hycdn.cn/assetbundle/official/Android/assets/" + assetsHash + "/" + fileName;
         if (fileName.equals("hot_update_list.json")){
+            System.out.println("Currently undergoing hot updates");
             FileUtils.writeStringToFile(new File("data/asset/hot_update_list.json"),
                     JsonUtils.fromUrl(assetUrl), "utf-8");
             String downloadFilePath = "data/asset/";

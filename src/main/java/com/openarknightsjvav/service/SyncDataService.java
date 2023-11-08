@@ -162,7 +162,7 @@ public class SyncDataService {
 
         Gson gson = new Gson();
 
-        FileUtils.writeStringToFile(new File("src/main/resources/syncData.json"), gson.toJson(syncData), "utf-8");
+        FileUtils.writeStringToFile(new File("data/syncData.json"), gson.toJson(syncData), "utf-8");
 
         result.put("playerDataDelta", Map.of("modified", new HashMap<>(), "deleted", new HashMap<>()));
         result.put("result", 0);
